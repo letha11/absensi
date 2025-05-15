@@ -1,13 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\facades\Auth;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Psy\Command\WhereamiCommand;
+use Illuminate\View\View;
 
-class DashboardController extends Controller
+final class DashboardController extends Controller
 {
     public function index()
     {

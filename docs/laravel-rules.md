@@ -1,0 +1,1 @@
+- When creating a laravel be it model, migration or anything else that possible within the terminal using php artisan or anything else, leverage the terminal approach instead of creating a new one.

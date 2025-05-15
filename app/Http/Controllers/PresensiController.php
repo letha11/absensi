@@ -1,202 +1,152 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers;
 
-use Illuminate\Support\Facades\DB;
-use Illuminate\Container\Attributes\Storage as AttributesStorage;
-use Illuminate\Support\Facades\Storage;
+use App\Http\Requests\StoreIzinRequest;
+use App\Http\Requests\StorePresensiRequest;
+use App\Http\Requests\UpdateProfileRequest;
+use App\Models\Karyawan;
+use App\Models\Presensi;
+use App\Services\IzinService;
+use App\Services\PresensiService;
+use App\Services\UserProfileService;
+use Carbon\Carbon;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Session\Store;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\DB; // Keep for histori, for now
+use Illuminate\Support\Facades\Redirect; // Keep for Redirect::back()
+use Illuminate\View\View;
 
-class PresensiController extends Controller
+final class PresensiController extends Controller
 {
-    public function create()
-    {
-        $hariini = date("Y-m-d");
-        $nik = Auth::guard('karyawan')->user()->nik;
-        $cek = DB::table('presensi')->where('tgl_presensi', $hariini)->where('nik', $nik)->count();
-        return view('presensi.create', compact('cek'));
+    public function __construct(
+        private readonly PresensiService $presensiService,
+        private readonly UserProfileService $userProfileService,
+        private readonly IzinService $izinService
+    ) {
     }
 
-    public function store(Request $request){
-        $nik = Auth::guard('karyawan')->user()->nik;
-        $tgl_presensi = date("Y-m-d");
-        $jam = date("H:i:s");
-        $latitudekantor = -6.331777974700566;
-        $longitudekantor = 106.71675909777613;
-        $lokasi = $request->lokasi;
-        $lokasiuser = explode(",", $lokasi);
-        $latitudeuser = $lokasiuser[0];
-        $longitudeuser = $lokasiuser[1];
-        $jarak = $this->distance($latitudekantor, $longitudekantor, $latitudeuser, $longitudeuser);
-        $radius = round($jarak["meters"]);
-        $cek = DB::table('presensi')->where('tgl_presensi', $tgl_presensi)->where('nik', $nik)->count();
+    public function create(): View
+    {
+        $today = Carbon::today()->toDateString();
+        /** @var \App\Models\Karyawan $karyawan */
+        $karyawan = Auth::guard('karyawan')->user();
+        $nik = $karyawan->nik;
 
-        if ($cek > 0){
-            $ket = "out";
-        } else {
-            $ket = "in";
+        $cekPresensi = Presensi::where('nik', $nik)
+            ->where('tgl_presensi', $today)
+            ->count();
+        
+        return view('presensi.create', ['cek' => $cekPresensi]);
+    }
+
+    public function store(StorePresensiRequest $request): JsonResponse
+    {
+        $validatedData = $request->validated();
+        /** @var \App\Models\Karyawan $karyawan */
+        $karyawan = Auth::guard('karyawan')->user();
+        $nik = (string) $karyawan->nik;
+
+        $result = $this->presensiService->storePresensi(
+            $nik,
+            $validatedData['lokasi'],
+            $validatedData['image']
+        );
+
+        if ($result['status'] === 'success') {
+            return response()->json($result);
         }
-        $image = $request->image;
-        $folderPath = "public/uploads/absensi/";
-        $formatName = $nik."-".$tgl_presensi."-".$ket;
-        $image_parts = explode(";base64", $image);
-        $image_base64 = base64_decode($image_parts[1]);
-        $fileName = $formatName.".png";
-        $file = $folderPath.$fileName;
-        
-        
-        if ($radius > 10){
-            echo "error|Maaf Anda Berada di Luar Radius Kantor, Jarak Anda ". $radius . " Meter dari Kantor|";
-        } else {
-        
-        if($cek > 0){
-            $data_pulang = [
-                'jam_out' => $jam,
-                'foto_out' => $fileName,
-                'lokasi_out' => $lokasi
-            ];
-            $update = DB::table('presensi')->where('tgl_presensi', $tgl_presensi)->where('nik', $nik)->update($data_pulang);
-            if ($update){
-                echo "success|Terima kasih atas kerja keras anda. Hati-hati di Jalan|out";
-                Storage::put($file, $image_base64);
-            } else{
-                echo "error|Absensi Gagal. Silahkan Hubungi Icik Bos|out";
-            }
-        } else {
-            $data = [
-                'nik' => $nik,
-                'tgl_presensi' => $tgl_presensi,
-                'jam_in' => $jam,
-                'foto_in' => $fileName,
-                'lokasi_in' => $lokasi
-            ];
-            $simpan = DB::table('presensi')->insert($data);
-            if ($simpan){
-                echo "success|Terima kasih. Selamat Bekerja|in";
-                Storage::put($file, $image_base64);
-            } else{
-                echo "error|Absensi Gagal. Silahkan Hubungi Icik Bos|in";
-            }
-        }
-    }
-}
 
-    //Menghitung Jarak 
-    function distance($lat1, $lon1, $lat2, $lon2)
-    {
-        $theta = $lon1 - $lon2;
-        $miles = (sin(deg2rad($lat1)) * sin(deg2rad($lat2))) + (cos(deg2rad($lat1)) * cos(deg2rad($lat2)) * cos(deg2rad($theta)));
-        $miles = acos($miles);
-        $miles = rad2deg($miles);
-        $miles = $miles * 60 * 1.1515;
-        $feet = $miles * 5280;
-        $yards = $feet / 3;
-        $kilometers = $miles * 1.609344;
-        $meters = $kilometers * 1000;
-        return compact('meters');
+        return response()->json($result, 422); // Unprocessable Entity for known errors like out of radius
     }
 
-    public function editprofile()
+    public function editprofile(): View
     {
-        $nik = Auth::guard('karyawan')->user()->nik;
-        $karyawan = DB::table('karyawan')->where('nik', $nik)->first();
+        /** @var \App\Models\Karyawan $karyawan */
+        $karyawan = Auth::guard('karyawan')->user();
         return view('presensi.editprofile', compact('karyawan'));
     }
 
-    public function updateprofile(Request $request){
-        $nik = Auth::guard('karyawan')->user()->nik;
-        $nama_lengkap = $request->nama_lengkap;
-        $no_hp = $request->no_hp;
-        $password = Hash::make($request->password);
-        $karyawan = DB::table('karyawan')->where('nik', $nik)->first();
-        if($request->hasFile('foto')){
-            $foto = $nik.".".$request->file('foto')->getClientOriginalExtension();
-        }else {
-            $foto = $karyawan->foto;
-        }
-        if(empty($request->password)){
-            $data =[
-                'nama_lengkap'=>$nama_lengkap,
-                'no_hp'=>$no_hp,
-                'foto'=>$foto
-            ];
-        }else {
-            $data =[
-                'nama_lengkap'=>$nama_lengkap,
-                'no_hp'=>$no_hp,
-                'password'=>$password,
-                'foto' =>$foto
-            ];
+    public function updateprofile(UpdateProfileRequest $request): RedirectResponse
+    {
+        /** @var \App\Models\Karyawan $karyawanAuth */
+        $karyawanAuth = Auth::guard('karyawan')->user();
+        $nik = (string) $karyawanAuth->nik;
+        
+        $profileData = $request->safe()->except(['foto', 'password_confirmation']);
+        $photoFile = $request->hasFile('foto') ? $request->file('foto') : null;
+
+        $success = $this->userProfileService->updateUserProfile($nik, $profileData, $photoFile);
+
+        if ($success) {
+            return Redirect::back()->with(['success' => 'Data Berhasil di Update']);
         }
 
-        $update = DB::table('karyawan')->where('nik', $nik)->update($data);
-        if($update){
-            if($request->hasFile('foto')){
-                $folderPath = "public/uploads/karyawan/";
-                $request->file('foto')->storeAs($folderPath, $foto);
-            }
-            return Redirect::back()->with(['success'=>'Data Berhasil di Update']);
-        }else {
-            return Redirect::back()->with(['error'=>'Data Gagal di Update']);
-        }
+        return Redirect::back()->with(['error' => 'Data Gagal di Update']);
     }
 
-    public function histori()
+    public function histori(): View
     {
-        $namabulan = ["", "Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
+        $namabulan = [
+            "", "Januari", "Februari", "Maret", "April", "Mei", "Juni", 
+            "Juli", "Agustus", "September", "Oktober", "November", "Desember"
+        ];
         return view('presensi.histori', compact('namabulan'));
     }
 
-    public function gethistori(Request $request){
-        $bulan = $request->bulan;
-        $tahun = $request->tahun;
-        $nik = Auth::guard('karyawan')->user()->nik;
+    public function gethistori(Request $request): View
+    {
+        $bulan = $request->input('bulan');
+        $tahun = $request->input('tahun');
+        /** @var \App\Models\Karyawan $karyawan */
+        $karyawan = Auth::guard('karyawan')->user();
+        $nik = $karyawan->nik;
 
-        $histori = DB::table('presensi')
-        ->whereRaw('MONTH(tgl_presensi)="'.$bulan.'"')
-        ->whereRaw('YEAR(tgl_presensi)="'.$tahun.'"')
-        ->where('nik', $nik)
-        ->orderBy('tgl_presensi')
-        ->get();
+        if (!$bulan || !$tahun) {
+            return view('presensi.gethistori', ['histori' => collect()]);
+        }
+        
+        $histori = Presensi::where('nik', $nik)
+            ->whereMonth('tgl_presensi', $bulan)
+            ->whereYear('tgl_presensi', $tahun)
+            ->orderBy('tgl_presensi')
+            ->get();
 
         return view('presensi.gethistori', compact('histori'));
     }
     
-    public function izin()
+    public function izin(): View
     {
         return view('presensi.izin');
     }
 
-    public function buatizin()
+    public function buatizin(): View
     {
-        return view ('presensi.buatizin');
+        return view('presensi.buatizin');
     }
 
-    public function storeizin(Request $request)
+    public function storeizin(StoreIzinRequest $request): RedirectResponse
     {
-        $nik = Auth::guard('karyawan')->user()->nik;
-        $tgl_izin = $request->tgl_izin;
-        $status = $request->status;
-        $keterangan = $request->keterangan;
+        $validatedData = $request->validated();
+        /** @var \App\Models\Karyawan $karyawan */
+        $karyawan = Auth::guard('karyawan')->user();
+        $nik = (string) $karyawan->nik;
 
-        $data = [
-            'nik'=>$nik,
-            'tgl_izin'=>$tgl_izin,
-            'status'=>$status,
-            'keterangan'=>$keterangan
-        ];
+        $pengajuanIzin = $this->izinService->storeIzin(
+            $nik,
+            $validatedData['tgl_izin'],
+            $validatedData['status'],
+            $validatedData['keterangan']
+        );
 
-        $simpan = DB::table('pengajuan_izin')->insert($data);
-
-        if ($simpan){
+        if ($pengajuanIzin) {
             return redirect('/presensi/izin')->with(['success' => 'Data Berhasil Tersimpan']);
-        } else {
-            return redirect('/presensi/izin')->with(['error' => 'Data Gagal Disimpan']);
         }
 
+        return redirect()->back()->withInput()->with(['error' => 'Data Gagal Disimpan']);
     }
 }

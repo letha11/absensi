@@ -18,11 +18,11 @@
     <!-- END GLOBAL MANDATORY STYLES -->
     <!-- BEGIN PLUGINS STYLES -->
     <link href="{{ asset('tabler/dist/css/tabler-flags.css?1744816591') }}" rel="stylesheet" />
-    <link href=".{{ asset('tabler/dist/css/tabler-socials.css?1744816591') }}" rel="stylesheet" />
-    <link href=".{{ asset('tabler/dist/css/tabler-payments.css?1744816591') }}" rel="stylesheet" />
-    <link href=".{{ asset('tabler/dist/css/tabler-vendors.css?1744816591') }}" rel="stylesheet" />
-    <link href=".{{ asset('tabler/dist/css/tabler-marketing.css?1744816591') }}" rel="stylesheet" />
-    <link href=".{{ asset('tabler/dist/css/tabler-themes.css?1744816591') }}" rel="stylesheet" />
+    <link href="{{ asset('tabler/dist/css/tabler-socials.css?1744816591') }}" rel="stylesheet" />
+    <link href="{{ asset('tabler/dist/css/tabler-payments.css?1744816591') }}" rel="stylesheet" />
+    <link href="{{ asset('tabler/dist/css/tabler-vendors.css?1744816591') }}" rel="stylesheet" />
+    <link href="{{ asset('tabler/dist/css/tabler-marketing.css?1744816591') }}" rel="stylesheet" />
+    <link href="{{ asset('tabler/dist/css/tabler-themes.css?1744816591') }}" rel="stylesheet" />
     <!-- END PLUGINS STYLES -->
     <!-- BEGIN DEMO STYLES -->
     <link href="{{ asset('tabler/preview/css/demo.css?1744816591') }}" rel="stylesheet" />
