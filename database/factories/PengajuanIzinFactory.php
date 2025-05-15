@@ -19,7 +19,9 @@ class PengajuanIzinFactory extends Factory
     public function definition(): array
     {
         return [
-            'nik' => Karyawan::inRandomOrder()->first()->nik ?? Karyawan::factory(),
+            'karyawan_email' => function () {
+                return (Karyawan::inRandomOrder()->first() ?? Karyawan::factory()->create())->email;
+            },
             'tgl_izin' => $this->faker->dateTimeBetween('-2 months', '+1 month')->format('Y-m-d'),
             'status' => $this->faker->randomElement(['i', 's']), // i for izin, s for sakit
             'keterangan' => $this->faker->sentence(),

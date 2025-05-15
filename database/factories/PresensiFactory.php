@@ -30,7 +30,9 @@ class PresensiFactory extends Factory
         }
 
         return [
-            'nik' => Karyawan::inRandomOrder()->first()->nik ?? Karyawan::factory(),
+            'karyawan_email' => function () {
+                return (Karyawan::inRandomOrder()->first() ?? Karyawan::factory()->create())->email;
+            },
             'tgl_presensi' => $this->faker->dateTimeBetween('-1 month', 'now')->format('Y-m-d'),
             'jam_in' => $jamMasuk,
             'jam_out' => $jamKeluar,

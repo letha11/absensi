@@ -14,14 +14,14 @@ final class UserProfileService
     /**
      * Update user profile.
      *
-     * @param string $nik
+     * @param string $email The user's email
      * @param array<string, mixed> $data Validated data (nama_lengkap, no_hp, password (optional))
      * @param ?UploadedFile $photoFile Optional new photo file
      * @return bool True on success, false on failure
      */
-    public function updateUserProfile(string $nik, array $data, ?UploadedFile $photoFile): bool
+    public function updateUserProfile(string $email, array $data, ?UploadedFile $photoFile): bool
     {
-        $karyawan = Karyawan::find($nik);
+        $karyawan = Karyawan::find($email); // Find by email (new primary key)
         if (!$karyawan) {
             return false;
         }
@@ -36,22 +36,28 @@ final class UserProfileService
         }
 
         if ($photoFile) {
-            $folderPath = 'public/uploads/karyawan'; // Relative to storage disk
-            // Use a more unique name or keep the nik.extension format if preferred
-            $photoName = $nik . '.' . $photoFile->getClientOriginalExtension();
-            // Deleting old photo first if it exists and has a different name or to prevent orphaned files
-            if ($karyawan->foto && Storage::exists($folderPath . '/' . $karyawan->foto)) {
-                 if ($karyawan->foto !== $photoName) { // Only delete if name changes or if you always want to replace
-                    Storage::delete($folderPath . '/' . $karyawan->foto);
-                 }
+            $directory = 'uploads/karyawan'; // Path relative to the 'public' disk's root (storage/app/public)
+            $photoName = $karyawan->nik . '.' . $photoFile->getClientOriginalExtension();
+            
+            // If there's an old photo, prepare its path for deletion
+            if ($karyawan->foto) {
+                $oldPhotoPath = $directory . '/' . $karyawan->foto;
+                // Check if the old photo exists on the public disk and is different from the new one before deleting
+                if (Storage::disk('public')->exists($oldPhotoPath) && $karyawan->foto !== $photoName) {
+                    Storage::disk('public')->delete($oldPhotoPath);
+                }
             }
-            $photoFile->storeAs($folderPath, $photoName); // Uses default disk (usually 'local')
-            $updateData['foto'] = $photoName;
-        } else {
-            // If no new photo is uploaded, but password is empty, 
-            // ensure 'foto' is not accidentally removed from $updateData if it wasn't in $data
-            // However, the current logic in controller keeps $karyawan->foto if no new file.
-            // This service assumes $data will not contain 'foto' if no file is uploaded.
+            
+            // Store the new photo on the 'public' disk.
+            // The storeAs method on UploadedFile returns the path relative to the disk's root if successful, false otherwise.
+            $storedPath = $photoFile->storeAs($directory, $photoName, 'public');
+
+            if ($storedPath) { // Ensure storing was successful
+                $updateData['foto'] = $photoName; // photoName is just the filename, which is what we store in DB
+            } else {
+                // Optional: Log an error or return false if file storage is critical and failed.
+                // If $storedPath is false, 'foto' won't be updated in the database.
+            }
         }
 
         return $karyawan->update($updateData);

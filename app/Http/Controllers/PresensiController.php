@@ -57,10 +57,10 @@ final class PresensiController extends Controller
         $validatedData = $request->validated();
         /** @var \App\Models\Karyawan $karyawan */
         $karyawan = Auth::guard('karyawan')->user();
-        $nik = (string) $karyawan->nik;
+        $identifier = (string) $karyawan->email;
 
         $result = $this->presensiService->storePresensi(
-            $nik,
+            $identifier,
             $validatedData['lokasi'],
             $validatedData['image']
         );
@@ -83,12 +83,12 @@ final class PresensiController extends Controller
     {
         /** @var \App\Models\Karyawan $karyawanAuth */
         $karyawanAuth = Auth::guard('karyawan')->user();
-        $nik = (string) $karyawanAuth->nik;
+        $email = (string) $karyawanAuth->email;
         
         $profileData = $request->safe()->except(['foto', 'password_confirmation']);
         $photoFile = $request->hasFile('foto') ? $request->file('foto') : null;
 
-        $success = $this->userProfileService->updateUserProfile($nik, $profileData, $photoFile);
+        $success = $this->userProfileService->updateUserProfile($email, $profileData, $photoFile);
 
         if ($success) {
             return Redirect::back()->with(['success' => 'Data Berhasil di Update']);
@@ -128,7 +128,11 @@ final class PresensiController extends Controller
     
     public function izin(): View
     {
-        return view('presensi.izin');
+        /** @var \App\Models\Karyawan $karyawan */
+        $karyawan = Auth::guard('karyawan')->user();
+        $dataizin = $karyawan->pengajuanIzin()->orderByDesc('tgl_izin')->get();
+
+        return view('presensi.izin', compact('dataizin'));
     }
 
     public function buatizin(): View
@@ -141,10 +145,10 @@ final class PresensiController extends Controller
         $validatedData = $request->validated();
         /** @var \App\Models\Karyawan $karyawan */
         $karyawan = Auth::guard('karyawan')->user();
-        $nik = (string) $karyawan->nik;
+        $identifier = (string) $karyawan->email;
 
         $pengajuanIzin = $this->izinService->storeIzin(
-            $nik,
+            $identifier,
             $validatedData['tgl_izin'],
             $validatedData['status'],
             $validatedData['keterangan']

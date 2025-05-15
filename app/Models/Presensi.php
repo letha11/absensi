@@ -17,7 +17,7 @@ final class Presensi extends Model
 
     // Define fillable properties
     protected $fillable = [
-        'nik',
+        'karyawan_email',
         'tgl_presensi',
         'jam_in',
         'jam_out',
@@ -39,6 +39,6 @@ final class Presensi extends Model
 
     public function karyawan(): BelongsTo
     {
-        return $this->belongsTo(Karyawan::class, 'nik', 'nik');
+        return $this->belongsTo(Karyawan::class, 'karyawan_email', 'email');
     }
 }

@@ -23,10 +23,11 @@ class KaryawanFactory extends Factory
         return [
             'nik' => $this->faker->unique()->numerify('##########'), // 10 digit NIK
             'nama_lengkap' => $this->faker->name(),
+            'email' => $this->faker->unique()->safeEmail(),
             'jabatan' => $this->faker->jobTitle(),
             'password' => static::$password ??= Hash::make('password'),
-            // 'no_hp' => $this->faker->phoneNumber(), // Assuming no_hp might be added later
-            // 'foto' => null, // Assuming foto might be added later
+            'no_hp' => $this->faker->phoneNumber(),
+            'foto' => null,
             // 'kode_dept' => $this->faker->randomElement(['IT', 'HRD', 'MKT']), // Assuming kode_dept
         ];
     }

@@ -17,7 +17,7 @@
             @csrf
                     <div class="form-group">
                         <!-- Gunakan class 'datepicker' khusus Materialize -->
-                        <input type="text" name="tgl_izin" class="datepicker" id="material-datepicker" placeholder="Tanggal">
+                        <input type="text" name="tgl_izin" class="datepicker" id="tgl_izin" placeholder="Tanggal">
                     </div>
             <div class="form-group">
                 <select name="status" id="status" class="form-control">
@@ -46,8 +46,8 @@
 <script>
     // Inisialisasi datepicker setelah DOM siap
     document.addEventListener('DOMContentLoaded', function() {
-        var datepicker = M.Datepicker.init(document.getElementById('material-datepicker'), {
-            format: 'dd-mm-yyyy',
+        var datepicker = M.Datepicker.init(document.getElementById('tgl_izin'), {
+            format: 'yyyy-mm-dd',
             autoClose: true,
             showClearBtn: true,
             i18n: {

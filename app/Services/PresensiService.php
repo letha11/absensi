@@ -39,12 +39,12 @@ final class PresensiService
     /**
      * Store presence data (clock in/out).
      *
-     * @param string $nik
+     * @param string $email Karyawan's email
      * @param string $lokasi User's current location "latitude,longitude"
      * @param string $imageBase64 Base64 encoded image string
      * @return array<string, mixed> Containing status, message, and type (in/out)
      */
-    public function storePresensi(string $nik, string $lokasi, string $imageBase64): array
+    public function storePresensi(string $email, string $lokasi, string $imageBase64): array
     {
         $today = Carbon::now()->toDateString();
         $currentTime = Carbon::now()->toTimeString();
@@ -67,21 +67,44 @@ final class PresensiService
         }
 
         // Check existing presensi for today using Eloquent
-        $existingPresensi = Presensi::where('nik', $nik)
+        $existingPresensi = Presensi::where('karyawan_email', $email)
                                     ->where('tgl_presensi', $today)
                                     ->first();
         
         $ket = $existingPresensi ? 'out' : 'in';
 
-        $folderPath = "public/uploads/absensi/"; // Relative to Storage::disk('local')->put()
-        $formatName = "{$nik}-{$today}-{$ket}";
-        $fileName = "{$formatName}.png";
-        $filePath = $folderPath . $fileName;
+        // We need Karyawan->nik for the filename, fetch the Karyawan model first
+        $karyawan = Karyawan::find($email);
+        if (!$karyawan) {
+            // This should ideally not happen if $email comes from an authenticated user
+            return [
+                'status' => 'error',
+                'message' => 'Karyawan tidak ditemukan.',
+                'type' => null
+            ];
+        }
+        $nikForFilename = $karyawan->nik; // Use NIK for filename as per current convention
 
-        // Decode and store image
-        // The $imageBase64 is expected to be just the data part, without "data:image/png;base64,"
-        $imageParts = explode(";base64,", $imageBase64);
-        $decodedImage = base64_decode($imageParts[1] ?? $imageBase64); // Handle if prefix is not there
+        $folderPathOnPublicDisk = "uploads/absensi/"; // Path relative to storage/app/public
+        $formatName = "{$nikForFilename}-{$today}-{$ket}";
+        $fileName = "{$formatName}.png";
+        $filePathOnPublicDisk = $folderPathOnPublicDisk . $fileName;
+
+        // Decode and store image more robustly
+        $pureBase64 = $imageBase64;
+        if (strpos($pureBase64, ';base64,') !== false) {
+            [, $pureBase64] = explode(';base64,', $pureBase64, 2);
+        }
+
+        $decodedImage = base64_decode($pureBase64, true);
+
+        if ($decodedImage === false) {
+            return [
+                'status' => 'error',
+                'message' => 'Invalid image data provided.',
+                'type' => $ket 
+            ];
+        }
 
         if ($existingPresensi) { // Clock Out
             if ($existingPresensi->jam_out !== null) {
@@ -96,7 +119,7 @@ final class PresensiService
             $existingPresensi->lokasi_out = $lokasi;
             
             if ($existingPresensi->save()) {
-                Storage::put($filePath, $decodedImage);
+                Storage::disk('public')->put($filePathOnPublicDisk, $decodedImage);
                 return [
                     'status' => 'success',
                     'message' => 'Terima kasih atas kerja keras anda. Hati-hati di Jalan',
@@ -105,7 +128,7 @@ final class PresensiService
             }
         } else { // Clock In
             $newPresensi = Presensi::create([
-                'nik' => $nik,
+                'karyawan_email' => $email,
                 'tgl_presensi' => $today,
                 'jam_in' => $currentTime,
                 'foto_in' => $fileName, // Storing only filename
@@ -113,7 +136,7 @@ final class PresensiService
             ]);
 
             if ($newPresensi) {
-                Storage::put($filePath, $decodedImage);
+                Storage::disk('public')->put($filePathOnPublicDisk, $decodedImage);
                 return [
                     'status' => 'success',
                     'message' => 'Terima kasih. Selamat Bekerja',

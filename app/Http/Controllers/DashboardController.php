@@ -31,11 +31,11 @@ final class DashboardController extends Controller
         $historibulanini = $karyawan->presensi()
             ->whereMonth('tgl_presensi', $bulanini)
             ->whereYear('tgl_presensi', $tahunini)
-            ->orderBy('tgl_presensi')
+            ->orderBy('tgl_presensi', 'desc')
             ->get();
 
         $rekappresensi = $karyawan->presensi()
-            ->selectRaw('COUNT(nik) as jmlhadir, SUM(IF(jam_in > "07:00", 1,0)) as jmlterlambat')
+            ->selectRaw('COUNT(karyawan_email) as jmlhadir, SUM(IF(jam_in > "07:00", 1,0)) as jmlterlambat')
             ->whereMonth('tgl_presensi', $bulanini)
             ->whereYear('tgl_presensi', $tahunini)
             ->first();
@@ -49,7 +49,7 @@ final class DashboardController extends Controller
         
         $rekapizin = $karyawan->pengajuanIzin()
             ->selectRaw('SUM(IF(status="i",1,0)) as jmlizin, SUM(IF(status="s",1,0)) as jmlsakit')
-            ->where('status_approved', 1)
+            ->where('status_approved', 'a')
             ->whereMonth('tgl_izin', $bulanini)
             ->whereYear('tgl_izin', $tahunini)
             ->first();
@@ -65,7 +65,7 @@ final class DashboardController extends Controller
         $hariini = Carbon::today()->toDateString();
         
         $rekappresensi = Presensi::query()
-            ->selectRaw('COUNT(nik) as jmlhadir, SUM(IF(jam_in > "07:00", 1,0)) as jmlterlambat')
+            ->selectRaw('COUNT(karyawan_email) as jmlhadir, SUM(IF(jam_in > "07:00", 1,0)) as jmlterlambat')
             ->where('tgl_presensi', $hariini)
             ->first();
 

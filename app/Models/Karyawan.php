@@ -15,22 +15,26 @@ final class Karyawan extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
 
-    protected $table ="karyawan";
-    protected $primaryKey ="nik";
+    protected $table = "karyawan";
+    protected $primaryKey = "email";
+    public $incrementing = false;
+    protected $keyType = 'string';
+
     protected $fillable = [
         'nik',
         'nama_lengkap',
         'jabatan',
+        'email',
         'password',
+        'no_hp',
+        'foto',
     ];
 
-   
     protected $hidden = [
         'password',
         'remember_token',
     ];
 
- 
     protected function casts(): array
     {
         return [
@@ -39,13 +43,23 @@ final class Karyawan extends Authenticatable
         ];
     }
 
+    /**
+     * Get the name of the unique identifier for the user.
+     *
+     * @return string
+     */
+    public function getAuthIdentifierName(): string
+    {
+        return 'email';
+    }
+
     public function presensi(): HasMany
     {
-        return $this->hasMany(Presensi::class, 'nik', 'nik');
+        return $this->hasMany(Presensi::class, 'karyawan_email', 'email');
     }
 
     public function pengajuanIzin(): HasMany
     {
-        return $this->hasMany(PengajuanIzin::class, 'nik', 'nik');
+        return $this->hasMany(PengajuanIzin::class, 'karyawan_email', 'email');
     }
 }

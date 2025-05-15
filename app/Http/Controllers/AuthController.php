@@ -11,30 +11,34 @@ use Illuminate\Http\RedirectResponse;
 
 final class AuthController extends Controller
 {
-    public function proseslogin(Request $request)
+    public function proseslogin(Request $request): RedirectResponse
     {
-        if(Auth::guard('karyawan')->attempt(['nik'=> $request->nik,'password'=> $request->password])){
+        if (Auth::guard('karyawan')->attempt(['email' => $request->email, 'password' => $request->password])) {
             return redirect('/dashboard');
-        }else{
-            return redirect('/')->with(['warning'=>'Nik / Password Salah']);
+        } else {
+            return redirect('/')->with(['warning' => 'Email / Password Salah']);
         }
     }
 
-    public function proseslogout(){
-        if (Auth::guard('karyawan')->check()){
+    public function proseslogout(): RedirectResponse
+    {
+        if (Auth::guard('karyawan')->check()) {
             Auth::guard('karyawan')->logout();
             return redirect('/');
         }
+        return redirect('/');
     }
     
-    public function proseslogoutadmin(){
-        if (Auth::guard('user')->check()){
+    public function proseslogoutadmin(): RedirectResponse
+    {
+        if (Auth::guard('user')->check()) {
             Auth::guard('user')->logout();
             return redirect('/panel');
         }
+        return redirect('/panel');
     }
 
-    public function prosesloginadmin(Request $request)
+    public function prosesloginadmin(Request $request): RedirectResponse
     {
         if(Auth::guard('user')->attempt(['email'=> $request->email,'password'=> $request->password])){
             return redirect('/panel/dashboardadmin');

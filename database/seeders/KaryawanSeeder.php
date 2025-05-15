@@ -14,14 +14,16 @@ class KaryawanSeeder extends Seeder
      */
     public function run(): void
     {
-        Karyawan::factory(10)->create(); // Create 10 sample karyawan
-
         // Create a specific karyawan for testing if needed
         Karyawan::factory()->create([
             'nik' => '1234567890',
             'nama_lengkap' => 'Test Karyawan',
+            'email' => 'test@example.com',
             'jabatan' => 'Tester',
-            'password' => Hash::make('password'), // Or use Hash::make()
+            'no_hp' => '081234567890',
+            'password' => Hash::make('password'),
         ]);
+
+        Karyawan::factory(10)->create(); // Create 10 sample karyawan
     }
 }

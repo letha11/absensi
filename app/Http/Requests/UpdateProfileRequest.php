@@ -3,6 +3,9 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
+use Illuminate\Validation\Rules\Password;
 
 class UpdateProfileRequest extends FormRequest
 {
@@ -11,7 +14,7 @@ class UpdateProfileRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return Auth::guard('karyawan')->check();
     }
 
     /**
@@ -22,7 +25,10 @@ class UpdateProfileRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'nama_lengkap' => ['required', 'string', 'max:255'],
+            'no_hp' => ['required', 'string', 'max:15'], // Adjust max length as needed
+            'password' => ['nullable', 'confirmed', Password::min(8)->sometimes()],
+            'foto' => ['nullable', 'image', 'mimes:jpeg,png,jpg', 'max:2048'], // Max 2MB
         ];
     }
 }

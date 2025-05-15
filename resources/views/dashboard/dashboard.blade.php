@@ -4,12 +4,12 @@
     <div id="user-detail">
         <div class="avatar">
             @if (!empty(Auth::guard('karyawan')->user()->foto))
-            @php
-                $path = Storage::url('/uploads/karyawan/'.Auth::guard('karyawan')->user()->foto);
-            @endphp
-            <img src="{{ url($path) }}" alt="avatar" class="imaged w64" style="height:60px">
+                @php
+                    $path = Storage::url('/uploads/karyawan/'.Auth::guard('karyawan')->user()->foto);
+                @endphp
+                <img src="{{ url($path) }}" alt="avatar" class="imaged w64" style="height:60px">
             @else
-            <img src="assets/img/sample/avatar/avatar1.jpg" alt="avatar" class="imaged w64 rounded">
+                <img src="assets/img/sample/avatar/avatar1.jpg" alt="avatar" class="imaged w64 rounded">
             @endif
         </div>
         <div id="user-info">
@@ -118,7 +118,7 @@
         <div class="col-3">
             <div class="card">
                 <div class="card-body text-center" style="padding: 10px 12px !important">
-                    <span class="badge bg-danger" style="position: absolute; top:5px; right:8px; font-size:0.6rem;z-index:999">99</span>
+                    <span class="badge bg-danger" style="position: absolute; top:5px; right:8px; font-size:0.6rem;z-index:999">{{ $rekapizin->jmlizin ?? 0 }}</span>
                     <ion-icon name="reader-outline" style="font-size: 1.6rem;" class="text-success"></ion-icon>
                     <span style="font-size: 0.8rem; font-weight:500">Izin</span>
                 </div>
@@ -127,7 +127,7 @@
         <div class="col-3">
             <div class="card">
                 <div class="card-body text-center" style="padding: 10px 12px !important">
-                    <span class="badge bg-danger" style="position: absolute; top:5px; right:8px; font-size:0.6rem;z-index:999">99</span>
+                    <span class="badge bg-danger" style="position: absolute; top:5px; right:8px; font-size:0.6rem;z-index:999">{{ $rekapizin->jmlsakit ?? 0 }}</span>
                     <ion-icon name="bag-add-outline" style="font-size: 1.6rem;" class="text-warning"></ion-icon>
                     <span style="font-size: 0.8rem; font-weight:500">Sakit</span>
                 </div>
@@ -166,13 +166,14 @@
                     @foreach ($historibulanini as $d)
                     <li>
                         <div class="item">
-                            <div class="icon-box bg-primary">
-                                <ion-icon name="save-outline"></ion-icon>
-                            </div>
+                            @php
+                                $path = $d->foto_in ? Storage::url('uploads/absensi/'.$d->foto_in) : asset('assets/img/sample/avatar/avatar1.jpg');
+                            @endphp
+                            <img src="{{ url($path) }}" alt="image" class="image" style="width: 40px; height: 40px;">
                             <div class="in">
                                 <div>{{ date("d-m-Y",strtotime($d->tgl_presensi)) }}</div>
                                 <span class="badge badge-success">{{ $d->jam_in }}</span>
-                                <span class="badge badge-danger">{{ $presensihariini != null && $d->jam_out != null ? $d->jam_out : 'Belum Absen' }}</span>
+                                <span class="badge badge-danger">{{ $d->jam_out != null ? $d->jam_out : 'Belum Absen' }}</span>
                             </div>
                         </div>
                     </li>
@@ -184,7 +185,7 @@
                     @foreach ($leaderboard as $d)
                     <li>
                         <div class="item">
-                            <img src="assets/img/sample/avatar/avatar1.jpg" alt="image" class="image">
+                            <img src="" alt="image" class="image">
                             <div class="in">
                                 <div><b>{{ $d->nama_lengkap }}</b><br>
                                     <small class="text-muted">{{ $d->jabatan }}</small>

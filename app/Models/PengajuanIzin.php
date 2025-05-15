@@ -17,11 +17,12 @@ final class PengajuanIzin extends Model
 
     // Define fillable properties
     protected $fillable = [
-        'nik',
+        // 'nik',
+        'karyawan_email',
         'tgl_izin',
         'status', // e.g., 'i' for izin, 's' for sakit
         'keterangan',
-        // 'status_approved' // Example: 0 = pending, 1 = approved, 2 = rejected
+        'status_approved' 
     ];
 
     // Define casts for attributes
@@ -34,6 +35,6 @@ final class PengajuanIzin extends Model
 
     public function karyawan(): BelongsTo
     {
-        return $this->belongsTo(Karyawan::class, 'nik', 'nik');
+        return $this->belongsTo(Karyawan::class, 'karyawan_email', 'email');
     }
 }
