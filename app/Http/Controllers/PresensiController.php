@@ -18,6 +18,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB; // Keep for histori, for now
 use Illuminate\Support\Facades\Redirect; // Keep for Redirect::back()
+use Illuminate\Support\Facades\Config; // Add Config facade
 use Illuminate\View\View;
 
 final class PresensiController extends Controller
@@ -38,8 +39,17 @@ final class PresensiController extends Controller
         $cekPresensi = $karyawan->presensi()
             ->where('tgl_presensi', $today)
             ->count();
+
+        $officeLatitude = Config::get('presensi.office_latitude');
+        $officeLongitude = Config::get('presensi.office_longitude');
+        $radiusMeters = Config::get('presensi.radius_meters');
         
-        return view('presensi.create', ['cek' => $cekPresensi]);
+        return view('presensi.create', [
+            'cek' => $cekPresensi,
+            'officeLatitude' => $officeLatitude,
+            'officeLongitude' => $officeLongitude,
+            'radiusMeters' => $radiusMeters
+        ]);
     }
 
     public function store(StorePresensiRequest $request): JsonResponse
