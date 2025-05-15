@@ -6,13 +6,14 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 final class Presensi extends Model
 {
     use HasFactory;
 
     // Define table name if not plural of model name
-    // protected $table = 'presensi';
+    protected $table = 'presensi';
 
     // Define fillable properties
     protected $fillable = [
@@ -36,9 +37,8 @@ final class Presensi extends Model
         ];
     }
 
-    // Add relationships here, e.g., to Karyawan
-    // public function karyawan()
-    // {
-    //    return $this->belongsTo(Karyawan::class, 'nik', 'nik');
-    // }
+    public function karyawan(): BelongsTo
+    {
+        return $this->belongsTo(Karyawan::class, 'nik', 'nik');
+    }
 }

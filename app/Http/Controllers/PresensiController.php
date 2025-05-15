@@ -8,7 +8,6 @@ use App\Http\Requests\StoreIzinRequest;
 use App\Http\Requests\StorePresensiRequest;
 use App\Http\Requests\UpdateProfileRequest;
 use App\Models\Karyawan;
-use App\Models\Presensi;
 use App\Services\IzinService;
 use App\Services\PresensiService;
 use App\Services\UserProfileService;
@@ -35,9 +34,8 @@ final class PresensiController extends Controller
         $today = Carbon::today()->toDateString();
         /** @var \App\Models\Karyawan $karyawan */
         $karyawan = Auth::guard('karyawan')->user();
-        $nik = $karyawan->nik;
-
-        $cekPresensi = Presensi::where('nik', $nik)
+        
+        $cekPresensi = $karyawan->presensi()
             ->where('tgl_presensi', $today)
             ->count();
         
@@ -104,13 +102,12 @@ final class PresensiController extends Controller
         $tahun = $request->input('tahun');
         /** @var \App\Models\Karyawan $karyawan */
         $karyawan = Auth::guard('karyawan')->user();
-        $nik = $karyawan->nik;
 
         if (!$bulan || !$tahun) {
             return view('presensi.gethistori', ['histori' => collect()]);
         }
         
-        $histori = Presensi::where('nik', $nik)
+        $histori = $karyawan->presensi()
             ->whereMonth('tgl_presensi', $bulan)
             ->whereYear('tgl_presensi', $tahun)
             ->orderBy('tgl_presensi')
