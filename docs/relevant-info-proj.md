@@ -1,6 +1,9 @@
 # Information
 The target of this project is to create both an Employee and Admin web, and each feature will be described below.
 
+## Technical
+- We are using tabler template specifically this: https://tabler.io/admin-template
+
 ## Employee
 - Can presence (clock in, clock out), the time of clock in and clock out also will be saved. This presence also track their location of the device, and there will be limiting radius to it. Also they will be needed to take a picture, so the clock in and clock out will have their own picture.
 - See the history of their absence/presence.

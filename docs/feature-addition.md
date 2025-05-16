@@ -7,6 +7,7 @@
 2.	Membuat Search & Pagination Data Karyawan di Halaman Administrator
 3.	Membuat Form Input dan Validasi data karyawan
 4.	Edit & Delete Data Karyawan
+
 5.	Membuat Halaman Monitoring Presensi, menghitung Jumlah Keterlambatan dan menampilkan peta presensi Lokasi presensi dihalaman monitoring presensi
 6.	Membuat laporan presensi karyawan dan rekap presensi laporan seluruh karyawan.
 7.	Membuat Fitur Konfigurasi Lokasi Kantor

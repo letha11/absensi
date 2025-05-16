@@ -1,4 +1,3 @@
-
 <!doctype html>
 <!--
 * Tabler - Premium and Open Source dashboard template with responsive and high quality UI.
@@ -327,7 +326,7 @@
     </div>
     <!-- BEGIN PAGE LIBRARIES -->
     <script src="{{ asset('tabler/libs/apexcharts/dist/apexcharts.min.js?1744816593') }}" defer></script>
-    <script src="{{ asset('tabler//libs/jsvectormap/dist/jsvectormap.min.js?1744816593') }}" defer></script>
+    <script src="{{ asset('tabler/libs/jsvectormap/dist/js/jsvectormap.min.js?1744816593') }}" defer></script>
     <script src="{{ asset('tabler/libs/jsvectormap/dist/maps/world.js?1744816593') }}" defer></script>
     <script src="{{ asset('tabler/libs/jsvectormap/dist/maps/world-merc.js?1744816593') }}" defer></script>
     <!-- END PAGE LIBRARIES -->
@@ -337,6 +336,10 @@
     <!-- BEGIN DEMO SCRIPTS -->
     <script src="{{ asset('tabler/preview/js/demo.min.js?1744816593') }}" defer></script>
     <!-- END DEMO SCRIPTS -->
+
+    @include('layouts.script')
    
+    @stack('myscript')
+
   </body>
 </html>

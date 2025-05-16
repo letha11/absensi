@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\PresensiController;
+use App\Http\Controllers\Admin\KaryawanController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware(['guest:karyawan'])->group(function(){
@@ -44,5 +45,13 @@ Route::middleware(['auth:karyawan'])->group(function(){
 Route::middleware(['auth:user'])->group(function(){
     Route::get('/proseslogoutadmin', [AuthController::class, 'proseslogoutadmin']);
     Route::get('/panel/dashboardadmin', [DashboardController::class, 'dashboardadmin']);
+
+    // Karyawan Master Data
+    Route::get('/panel/karyawan', [KaryawanController::class, 'index'])->name('admin.karyawan.index');
+    Route::get('/panel/karyawan/create', [KaryawanController::class, 'create'])->name('admin.karyawan.create');
+    Route::post('/panel/karyawan', [KaryawanController::class, 'store'])->name('admin.karyawan.store');
+    Route::get('/panel/karyawan/{karyawan:nik}/edit', [KaryawanController::class, 'edit'])->name('admin.karyawan.edit');
+    Route::put('/panel/karyawan/{karyawan:nik}', [KaryawanController::class, 'update'])->name('admin.karyawan.update');
+    Route::delete('/panel/karyawan/{karyawan:nik}', [KaryawanController::class, 'destroy'])->name('admin.karyawan.destroy');
 });
 
