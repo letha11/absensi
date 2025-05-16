@@ -11,6 +11,24 @@
     </div>
 @endsection
 @section('content')
+<style>
+    .listview {
+        background-color: transparent;
+    border-top: none;
+    }
+    .listview > li::after {
+        display: none;
+    }
+    .listview.image-listview > li {
+        margin-bottom: 10px !important; /* Adjust as needed */
+        border: 1px solid #e0e0e0; Optional: adds a light border like in the image
+        border-radius: 5px; /* Optional: rounds the corners */
+    }
+    .listview.image-listview > li .item{
+        padding: 10px; /* Optional: adds some padding inside the item */
+        background-color: #fff;
+    } 
+</style>
 <div class="row" style="margin-top:70px">
     <div class="col">
           @php
@@ -42,10 +60,10 @@
                         <div class="item">
                             <div class="in">
                                 <div>
-                                    <strong>{{ date("d-m-Y", strtotime($d->tgl_izin)) }}</strong><br>
-                                    <small class="text-muted">{{ $d->status == 'i' ? 'Izin' : 'Sakit' }}</small>
+                                    <strong>{{ $d->status == 'i' ? 'Izin' : 'Sakit' }}</strong><br>
+                                    <small class="text-muted">{{ $d->keterangan }}</small>
                                     <br>
-                                    <small class="text-muted" style="white-space: normal; word-wrap: break-word;">{{ $d->keterangan }}</small>
+                                    <small class="text-muted" style="white-space: normal; word-wrap: break-word;">{{ date("d-m-Y", strtotime($d->tgl_izin)) }}</small>
                                 </div>
                                 @php
                                     $statusText = '';

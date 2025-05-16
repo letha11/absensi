@@ -43,6 +43,23 @@
 <!-- JavaScript Materialize (letakkan sebelum closing body) -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/js/materialize.min.js"></script>
 @push('myscript')
+<style>
+    .datepicker-modal {
+        max-height: 450px !important; /* Adjust as needed */
+        overflow-y: auto !important;
+    }
+
+    /* Optional: Adjust the content within the modal if necessary */
+    .datepicker-modal .modal-content {
+        padding-bottom: 0 !important;
+    }
+
+    /* Ensure the calendar itself doesn't overflow if its content is too tall */
+    .datepicker-calendar-container {
+        max-height: 300px; /* Adjust based on your preferred calendar height */
+        overflow-y: auto;
+    }
+</style>
 <script>
     // Inisialisasi datepicker setelah DOM siap
     document.addEventListener('DOMContentLoaded', function() {

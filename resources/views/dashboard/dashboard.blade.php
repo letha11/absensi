@@ -7,9 +7,9 @@
                 @php
                     $path = Storage::url('/uploads/karyawan/'.Auth::guard('karyawan')->user()->foto);
                 @endphp
-                <img src="{{ url($path) }}" alt="avatar" class="imaged w64" style="height:60px">
+                <img src="{{ url($path) }}" alt="avatar" class="imaged w64" style="height:60px; object-fit: cover;">
             @else
-                <img src="assets/img/sample/avatar/avatar1.jpg" alt="avatar" class="imaged w64 rounded">
+                <img src="assets/img/sample/avatar/avatar1.jpg" alt="avatar" class="imaged w64 rounded" style="height:60px; object-fit: cover;">
             @endif
         </div>
         <div id="user-info">
@@ -169,7 +169,7 @@
                             @php
                                 $path = $d->foto_in ? Storage::url('uploads/absensi/'.$d->foto_in) : asset('assets/img/sample/avatar/avatar1.jpg');
                             @endphp
-                            <img src="{{ url($path) }}" alt="image" class="image" style="width: 40px; height: 40px;">
+                            <img src="{{ url($path) }}" alt="image" class="image" style="width: 40px; height: 40px; object-fit: cover;">
                             <div class="in">
                                 <div>{{ date("d-m-Y",strtotime($d->tgl_presensi)) }}</div>
                                 <span class="badge badge-success">{{ $d->jam_in }}</span>

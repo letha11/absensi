@@ -8068,13 +8068,20 @@ body.dark-mode-active .cart-item .cart-item-footer {
   font-size: 30px;
 }
 
+.todaypresence .card {
+  min-height: 100px;
+  max-height: 100px;
+}
+
+
 .presencedetail {
-  line-height: 2px;
+  /* line-height: 2px; */
 }
 
 .presencetitle {
   color: white;
   font-weight: 600;
+  margin: 0;
 }
 
 .rekappresencetitle {
