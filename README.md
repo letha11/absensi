@@ -75,7 +75,13 @@ Berikut adalah langkah-langkah untuk menginstal dan menjalankan proyek ini dari 
 
     > password: password
 
-9. **Jalankan Server Pengembangan Laravel**
+9.  **Buat Symbolic Link untuk Storage**
+    ```bash
+    php artisan storage:link
+    ```
+    Perintah ini akan membuat symbolic link dari `public/storage` ke `storage/app/public`, yang memungkinkan file di storage publik dapat diakses melalui web.
+
+10. **Jalankan Server Pengembangan Laravel**
     ```bash
     php artisan serve
     ```
