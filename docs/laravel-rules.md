@@ -1,3 +1,0 @@
-- When creating a laravel be it model, migration or anything else that possible within the terminal using php artisan or anything else, leverage the terminal approach instead of creating a new one.
-- When implementing UI/Frontend for Admin related stuff, use the [Tabler](https://tabler.io/admin-template) Admin Template.
-- When implementing UI/Frontend for Admin related stuff, leverage using all material/script from `script.blade.php`
