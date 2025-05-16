@@ -20,6 +20,7 @@
     <link href="{{ asset('tabler/dist/css/tabler.css?1744816593') }}" rel="stylesheet" />
     <!-- END GLOBAL MANDATORY STYLES -->
     <!-- BEGIN PLUGINS STYLES -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <link href="{{ asset('tabler/dist/css/tabler-flags.css?1744816593') }}" rel="stylesheet" />
     <link href="{{ asset('tabler/dist/css/tabler-socials.css?1744816593') }}" rel="stylesheet" />
     <link href="{{ asset('tabler/dist/css/tabler-payments.css?1744816593') }}" rel="stylesheet" />
@@ -31,8 +32,17 @@
     <link href="{{ asset('tabler/preview/css/demo.css?1744816593') }}" rel="stylesheet" />
     <!-- END DEMO STYLES -->
     <!-- BEGIN CUSTOM FONT -->
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <style>
       @import url("https://rsms.me/inter/inter.css");
+      .map-presensi-large {
+            height: 500px; /* Height for the large map */
+            width: 100%;
+            border-radius: 4px;
+            margin-bottom: 1rem; /* Space below the map */
+        }
+      @stack('styles')
     </style>
     <!-- END CUSTOM FONT -->
   </head>

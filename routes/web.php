@@ -4,6 +4,8 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\PresensiController;
 use App\Http\Controllers\Admin\KaryawanController;
+use App\Http\Controllers\Admin\MonitoringController;
+use App\Http\Controllers\Admin\LaporanController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware(['guest:karyawan'])->group(function(){
@@ -53,5 +55,13 @@ Route::middleware(['auth:user'])->group(function(){
     Route::get('/panel/karyawan/{karyawan:nik}/edit', [KaryawanController::class, 'edit'])->name('admin.karyawan.edit');
     Route::put('/panel/karyawan/{karyawan:nik}', [KaryawanController::class, 'update'])->name('admin.karyawan.update');
     Route::delete('/panel/karyawan/{karyawan:nik}', [KaryawanController::class, 'destroy'])->name('admin.karyawan.destroy');
+
+    // Monitoring Presensi
+    Route::get('/panel/monitoring/presensi', [MonitoringController::class, 'index'])->name('admin.monitoring.presensi');
+
+    // Laporan Presensi
+    Route::get('/panel/laporan/presensi', [LaporanController::class, 'index'])->name('admin.laporan.presensi.index');
+    Route::post('/panel/laporan/presensi/cetak-karyawan', [LaporanController::class, 'cetakLaporanKaryawan'])->name('admin.laporan.presensi.cetak_karyawan');
+    Route::post('/panel/laporan/presensi/cetak-rekap', [LaporanController::class, 'cetakRekapLaporan'])->name('admin.laporan.presensi.cetak_rekap');
 });
 
