@@ -10,9 +10,10 @@ Pastikan perangkat Anda telah terinstal perangkat lunak berikut:
 
 - PHP (Versi 8.1 atau lebih tinggi direkomendasikan)
 - Composer (Manajer dependensi PHP)
-- Node.js dan NPM (Untuk manajemen aset frontend)
 - Web Server (Contoh: Apache, Nginx)
 - Database Server (Contoh: MySQL, PostgreSQL, MariaDB)
+
+Jika Anda menggunakan Laragon / XAMPP (Not tested), sebagian besar prasyarat sudah terpenuhi secara otomatis, sehingga bisa langsung ke proses selanjutnya.
 
 ## Panduan Instalasi Langkah Demi Langkah
 
