@@ -6,6 +6,8 @@ use App\Http\Controllers\PresensiController;
 use App\Http\Controllers\Admin\KaryawanController;
 use App\Http\Controllers\Admin\MonitoringController;
 use App\Http\Controllers\Admin\LaporanController;
+use App\Http\Controllers\Admin\KonfigurasiLokasiController;
+use App\Http\Controllers\Admin\PengajuanIzinController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware(['guest:karyawan'])->group(function(){
@@ -63,5 +65,13 @@ Route::middleware(['auth:user'])->group(function(){
     Route::get('/panel/laporan/presensi', [LaporanController::class, 'index'])->name('admin.laporan.presensi.index');
     Route::post('/panel/laporan/presensi/cetak-karyawan', [LaporanController::class, 'cetakLaporanKaryawan'])->name('admin.laporan.presensi.cetak_karyawan');
     Route::post('/panel/laporan/presensi/cetak-rekap', [LaporanController::class, 'cetakRekapLaporan'])->name('admin.laporan.presensi.cetak_rekap');
+
+    // Konfigurasi Lokasi Kantor
+    Route::get('/panel/konfigurasi/lokasi', [KonfigurasiLokasiController::class, 'index'])->name('admin.konfigurasi.lokasi.index');
+    Route::post('/panel/konfigurasi/lokasi', [KonfigurasiLokasiController::class, 'storeOrUpdate'])->name('admin.konfigurasi.lokasi.store');
+
+    // Persetujuan Izin/Sakit Karyawan
+    Route::get('/panel/pengajuan-izin', [PengajuanIzinController::class, 'index'])->name('admin.pengajuan_izin.index');
+    Route::post('/panel/pengajuan-izin/{id}/update-status', [PengajuanIzinController::class, 'updateStatus'])->name('admin.pengajuan_izin.update_status');
 });
 

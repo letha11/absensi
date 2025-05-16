@@ -120,7 +120,7 @@
                                         <td>{{ $item->jam_in_formatted ?? '-' }}</td>
                                         <td>
                                             @if ($item->foto_in)
-                                                <img src="{{ Storage::url('uploads/absensi/' . $item->foto_in) }}" class="avatar" alt="Foto Masuk">
+                                                <img src="{{ Storage::url('uploads/absensi/' . $item->foto_in) }}" class="avatar" style="object-fit: cover;" alt="Foto Masuk">
                                             @else
                                                 -
                                             @endif
@@ -128,7 +128,7 @@
                                         <td>{{ $item->jam_out_formatted ?? '-' }}</td>
                                          <td>
                                             @if ($item->foto_out)
-                                                <img src="{{ Storage::url('uploads/absensi/' . $item->foto_out) }}" class="avatar" alt="Foto Pulang">
+                                                <img src="{{ Storage::url('uploads/absensi/' . $item->foto_out) }}" class="avatar" style="object-fit: cover;" alt="Foto Pulang">
                                             @else
                                                 -
                                             @endif

@@ -350,6 +350,7 @@
     @include('layouts.script')
    
     @stack('myscript')
+    @stack('scripts')
 
   </body>
 </html>

@@ -6,9 +6,11 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Presensi;
+use App\Models\KonfigurasiLokasi;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Log;
 use Illuminate\View\View;
 
 final class MonitoringController extends Controller
@@ -57,9 +59,20 @@ final class MonitoringController extends Controller
         $jumlahTerlambat = $presensiHariIni->where('is_late', true)->count();
         $jumlahHadir = $presensiHariIni->count();
 
-        $officeLatitude = Config::get('presensi.office_latitude');
-        $officeLongitude = Config::get('presensi.office_longitude');
-        $officeRadius = Config::get('presensi.radius_meters');
+        $konfigurasiLokasi = KonfigurasiLokasi::first();
+        $officeLatitude = null;
+        $officeLongitude = null;
+        $officeRadius = null;
+
+        if ($konfigurasiLokasi) {
+            $officeLatitude = (float) $konfigurasiLokasi->latitude;
+            $officeLongitude = (float) $konfigurasiLokasi->longitude;
+            $officeRadius = (int) $konfigurasiLokasi->radius;
+        } else {
+            Log::error('Konfigurasi lokasi tidak ditemukan di database untuk halaman monitoring admin.');
+            // Variables are already null, an error will be logged.
+            // The view should handle these null values gracefully (e.g., by not displaying the map or showing a message).
+        }
 
         return view('admin.monitoring.index', compact(
             'presensiHariIni',

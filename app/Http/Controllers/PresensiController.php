@@ -8,6 +8,7 @@ use App\Http\Requests\StoreIzinRequest;
 use App\Http\Requests\StorePresensiRequest;
 use App\Http\Requests\UpdateProfileRequest;
 use App\Models\Karyawan;
+use App\Models\KonfigurasiLokasi;
 use App\Services\IzinService;
 use App\Services\PresensiService;
 use App\Services\UserProfileService;
@@ -18,7 +19,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB; // Keep for histori, for now
 use Illuminate\Support\Facades\Redirect; // Keep for Redirect::back()
-use Illuminate\Support\Facades\Config; // Add Config facade
+use Illuminate\Support\Facades\Log;
 use Illuminate\View\View;
 
 final class PresensiController extends Controller
@@ -30,7 +31,7 @@ final class PresensiController extends Controller
     ) {
     }
 
-    public function create(): View
+    public function create(): View|RedirectResponse
     {
         $today = Carbon::today()->toDateString();
         /** @var \App\Models\Karyawan $karyawan */
@@ -40,9 +41,16 @@ final class PresensiController extends Controller
             ->where('tgl_presensi', $today)
             ->count();
 
-        $officeLatitude = Config::get('presensi.office_latitude');
-        $officeLongitude = Config::get('presensi.office_longitude');
-        $radiusMeters = Config::get('presensi.radius_meters');
+        $konfigurasiLokasi = KonfigurasiLokasi::first();
+
+        if (!$konfigurasiLokasi) {
+            Log::error('Konfigurasi lokasi tidak ditemukan di database untuk halaman presensi create.');
+            return Redirect::back()->with('error', 'Konfigurasi lokasi kantor belum diatur. Tidak dapat menampilkan halaman presensi.');
+        }
+
+        $officeLatitude = (float) $konfigurasiLokasi->latitude;
+        $officeLongitude = (float) $konfigurasiLokasi->longitude;
+        $radiusMeters = (int) $konfigurasiLokasi->radius;
         
         return view('presensi.create', [
             'cek' => $cekPresensi,

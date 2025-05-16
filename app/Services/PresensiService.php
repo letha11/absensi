@@ -6,9 +6,11 @@ namespace App\Services;
 
 use App\Models\Presensi;
 use App\Models\Karyawan; // Assuming Karyawan model is used for fetching user details
+use App\Models\KonfigurasiLokasi;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB; // Temporarily, to check existing presence. Will be replaced by Eloquent.
+use Illuminate\Support\Facades\Log;
 use Carbon\Carbon;
 
 final class PresensiService
@@ -49,9 +51,20 @@ final class PresensiService
         $today = Carbon::now()->toDateString();
         $currentTime = Carbon::now()->toTimeString();
 
-        $officeLatitude = (float) config('presensi.office_latitude');
-        $officeLongitude = (float) config('presensi.office_longitude');
-        $radiusConfig = (int) config('presensi.radius_meters');
+        $konfigurasiLokasi = KonfigurasiLokasi::first();
+
+        if (!$konfigurasiLokasi) {
+            Log::error('Konfigurasi lokasi tidak ditemukan di database.');
+            return [
+                'status' => 'error',
+                'message' => 'Konfigurasi lokasi kantor belum diatur. Silakan hubungi administrator.',
+                'type' => null
+            ];
+        }
+
+        $officeLatitude = (float) $konfigurasiLokasi->latitude;
+        $officeLongitude = (float) $konfigurasiLokasi->longitude;
+        $radiusConfig = (int) $konfigurasiLokasi->radius;
 
         [$userLatitude, $userLongitude] = array_map('floatval', explode(",", $lokasi));
 
