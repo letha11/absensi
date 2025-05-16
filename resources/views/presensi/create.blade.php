@@ -85,45 +85,80 @@
     var map = null; // Keep track of the map instance
     var userMarker = null;
     var officeCircle = null;
+    var officeMarker = null; // Added for office marker instance
+    var originalButtonText = $("#takeabsen").html(); // Initialize here
+
+    // Custom icon for user's current location
+    var userLocationIcon = L.divIcon({
+        className: 'custom-div-icon',
+        html: "<div style='background-color:blue;width:1rem;height:1rem;border-radius:50%;border:2px solid white;box-shadow: 0 0 5px rgba(0,0,0,0.5);'></div>",
+        iconSize: [16, 16],
+        iconAnchor: [8, 8]
+    });
 
     // Function to initialize or update the map
-    function updateUserLocationOnMap(lat, lon) {
-        if (!map) {
-            map = L.map('map').setView([lat, lon], 16); 
+    function updateUserLocationOnMap(userLat, userLon) {
+        const hasUserLoc = userLat !== undefined && userLon !== undefined;
+        const hasOfficeLoc = typeof officeLat !== 'undefined' && officeLat !== null && typeof officeLng !== 'undefined' && officeLng !== null;
+
+        if (!map) { // If map isn't initialized, set it up
+            map = L.map('map');
             L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
                 maxZoom: 19,
                 attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
             }).addTo(map);
-            
-            // Office Circle (shows configured radius)
-            officeCircle = L.circle([officeLat, officeLng], { 
-                color: 'blue',
-                fillColor: '#3498db',
-                fillOpacity: 0.3,
-                radius: officeRadius // Use configured radius
-            }).addTo(map);
-            
-            // Add a marker for the office location for clarity
-             L.marker([officeLat, officeLng]).addTo(map)
-                .bindPopup('Lokasi Kantor')
-                .openPopup();
+
+            // Add office marker and circle if office location is available
+            if (hasOfficeLoc) {
+                officeMarker = L.marker([officeLat, officeLng]).addTo(map)
+                    .bindPopup('Lokasi Kantor');
+                
+                officeCircle = L.circle([officeLat, officeLng], { 
+                    color: 'blue',
+                    fillColor: '#3498db',
+                    fillOpacity: 0.3,
+                    radius: officeRadius
+                }).addTo(map);
+
+                if (!hasUserLoc) { // If only office is shown initially, open its popup
+                    officeMarker.openPopup();
+                }
+            }
         }
 
-        if (userMarker) {
-            userMarker.setLatLng([lat, lon]);
-        } else {
-            userMarker = L.marker([lat, lon]).addTo(map);
+        // Handle user marker (create or update if userLoc is available)
+        if (hasUserLoc) {
+            if (userMarker) {
+                userMarker.setLatLng([userLat, userLon]);
+            } else {
+                userMarker = L.marker([userLat, userLon], { icon: userLocationIcon }).addTo(map);
+            }
+            userMarker.bindPopup('Lokasi Anda Saat Ini').openPopup();
         }
-        map.setView([lat, lon], 16);
-        userMarker.bindPopup('Lokasi Anda Saat Ini').openPopup();
+
+        // Set map view based on available locations
+        if (map) { // Proceed only if map is initialized
+            if (hasUserLoc && hasOfficeLoc) {
+                var bounds = L.latLngBounds([userLat, userLon], [officeLat, officeLng]);
+                map.fitBounds(bounds, { padding: [50, 50] });
+            } else if (hasUserLoc) {
+                map.setView([userLat, userLon], 16); // Zoom 16 for user only
+            } else if (hasOfficeLoc) {
+                map.setView([officeLat, officeLng], 13); // Zoom 13 for office only
+                 if (officeMarker && !userMarker) officeMarker.openPopup(); // Ensure office popup is open if it's the only marker
+            } else { // Fallback if no locations and map is initialized
+                map.setView([0,0], 2);
+                var mapDiv = document.getElementById('map');
+                if(mapDiv) mapDiv.innerHTML = '<p class="text-center text-warning">Tidak ada data lokasi untuk ditampilkan.</p>';
+            }
+        }
     }
 
     function successCallback(position){
         var lat = position.coords.latitude;
         var lon = position.coords.longitude;
         lokasiInput.value = lat + "," + lon;
-        updateUserLocationOnMap(lat, lon);
-        // Enable button after location is acquired
+        updateUserLocationOnMap(lat, lon); // This will now handle map init/update
         $("#takeabsen").prop('disabled', false).html(originalButtonText); 
     }
 
@@ -148,39 +183,27 @@
             text: errorMessage,
             icon: 'error',
         });
-        // Re-enable button but indicate error or prompt to try again
+        updateUserLocationOnMap(); // Call without user coords, will rely on office or fallback
         $("#takeabsen").prop('disabled', false).html(originalButtonText); 
     }
 
-    var originalButtonText = $("#takeabsen").html();
-
-    // Initial attempt to get location when page loads (optional, for faster map display)
-    // if (navigator.geolocation){
-    //     navigator.geolocation.getCurrentPosition(successCallback, errorCallback, { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 });
-    // }
-    // To ensure fresh location on click, we get it inside the click handler primarily.
-    // For now, let's make sure the map is at least centered on the office if no user location yet.
-    if (!map && officeLat && officeLng) {
-        map = L.map('map').setView([officeLat, officeLng], 13); // Zoom out a bit if only office is shown
-        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            maxZoom: 19,
-            attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-        }).addTo(map);
-        officeCircle = L.circle([officeLat, officeLng], { 
-            color: 'blue',
-            fillColor: '#3498db',
-            fillOpacity: 0.3,
-            radius: officeRadius
-        }).addTo(map);
-         L.marker([officeLat, officeLng]).addTo(map)
-            .bindPopup('Lokasi Kantor')
-            .openPopup();
+    // Initial attempt to get location when page loads
+    if (navigator.geolocation){
+        // You can optionally set the button to a loading state here if desired
+        // $("#takeabsen").prop('disabled', true).html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Inisialisasi Peta...');
+        navigator.geolocation.getCurrentPosition(successCallback, errorCallback, { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 });
+    } else {
+        Swal.fire('Error!', 'Browser Anda tidak mendukung Geolokasi.', 'error');
+        updateUserLocationOnMap(); // Geolocation not supported, attempt to show office or fallback
+        $("#takeabsen").prop('disabled', false).html(originalButtonText); // Ensure button is enabled
     }
-
+    
+    // The old block for initial office map display is removed, as updateUserLocationOnMap now handles all cases.
+    // if (!map && officeLat && officeLng) { ... } // REMOVED
 
     $("#takeabsen").click(function(e){
         e.preventDefault(); // Prevent default form submission if any
-        originalButtonText = $(this).html(); // Store original text
+        // originalButtonText = $(this).html(); // Already stored globally
         $(this).prop('disabled', true).html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Mengambil lokasi...');
 
         if (navigator.geolocation){
@@ -189,7 +212,7 @@
                     var lat = parseFloat(position.coords.latitude.toFixed(6));
                     var lon = parseFloat(position.coords.longitude.toFixed(6));
                     lokasiInput.value = lat + "," + lon;
-                    updateUserLocationOnMap(lat, lon);
+                    updateUserLocationOnMap(lat, lon); // Update map with new location
 
                     // Proceed with webcam snap and AJAX only after location is successful
                     Webcam.snap(function(uri){
@@ -253,14 +276,14 @@
                     });
                 },
                 function(error) { // Error part of fetching location
-                    errorCallback(error); // Use the centralized error callback
-                    // Button state already handled in errorCallback
+                    errorCallback(error); // Use the centralized error callback which also calls updateUserLocationOnMap()
                 },
                 { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 } // Options for high accuracy & longer timeout
             );
         } else {
             Swal.fire('Error!', 'Browser Anda tidak mendukung Geolokasi.', 'error');
             $(this).prop('disabled', false).html(originalButtonText);
+            updateUserLocationOnMap(); // Attempt to update map status (e.g. show office if available)
         }
     });
 

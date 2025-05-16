@@ -138,7 +138,7 @@ final class PresensiController extends Controller
     {
         /** @var \App\Models\Karyawan $karyawan */
         $karyawan = Auth::guard('karyawan')->user();
-        $dataizin = $karyawan->pengajuanIzin()->orderByDesc('tgl_izin')->get();
+        $dataizin = $karyawan->pengajuanIzin()->orderBy('tgl_izin', 'desc')->get();
 
         return view('presensi.izin', compact('dataizin'));
     }

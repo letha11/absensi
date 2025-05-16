@@ -53,16 +53,6 @@
                         <span class="text-center">Histori</span>
                     </div>
                 </div>
-                <div class="item-menu text-center">
-                    <div class="menu-icon">
-                        <a href="" class="orange" style="font-size: 40px;">
-                            <ion-icon name="location"></ion-icon>
-                        </a>
-                    </div>
-                    <div class="menu-name">
-                        Lokasi
-                    </div>
-                </div>
             </div>
         </div>
     </div>
@@ -74,7 +64,7 @@
                 <div class="card gradasigreen">
                     <div class="card-body">
                         <div class="presencecontent">
-                            <div class="iconpresence">
+                            <div class="iconpresence mr-2">
                                 <ion-icon name="camera"></ion-icon>
                             </div>
                             <div class="presencedetail">
@@ -89,7 +79,7 @@
                 <div class="card gradasired">
                     <div class="card-body">
                         <div class="presencecontent">
-                            <div class="iconpresence">
+                            <div class="iconpresence mr-2">
                                 <ion-icon name="camera"></ion-icon>
                             </div>
                             <div class="presencedetail">
@@ -108,7 +98,7 @@
     <div class="row">
         <div class="col-3">
             <div class="card">
-                <div class="card-body text-center" style="padding: 10px 12px !important">
+                <div class="card-body text-center" style="padding: 10px 12px !important; display: flex; flex-direction: column; align-items: center;">
                     <span class="badge bg-danger" style="position: absolute; top:5px; right:8px; font-size:0.6rem;z-index:999">{{ $rekappresensi->jmlhadir }}</span>
                     <ion-icon name="accessibility-outline" style="font-size: 1.6rem;" class="text-primary"></ion-icon>
                     <span style="font-size: 0.8rem; font-weight:500">Hadir</span>
@@ -117,7 +107,7 @@
         </div>
         <div class="col-3">
             <div class="card">
-                <div class="card-body text-center" style="padding: 10px 12px !important">
+                <div class="card-body text-center" style="padding: 10px 12px !important; display: flex; flex-direction: column; align-items: center;">
                     <span class="badge bg-danger" style="position: absolute; top:5px; right:8px; font-size:0.6rem;z-index:999">{{ $rekapizin->jmlizin ?? 0 }}</span>
                     <ion-icon name="reader-outline" style="font-size: 1.6rem;" class="text-success"></ion-icon>
                     <span style="font-size: 0.8rem; font-weight:500">Izin</span>
@@ -126,7 +116,7 @@
         </div>
         <div class="col-3">
             <div class="card">
-                <div class="card-body text-center" style="padding: 10px 12px !important">
+                <div class="card-body text-center" style="padding: 10px 12px !important; display: flex; flex-direction: column; align-items: center;">
                     <span class="badge bg-danger" style="position: absolute; top:5px; right:8px; font-size:0.6rem;z-index:999">{{ $rekapizin->jmlsakit ?? 0 }}</span>
                     <ion-icon name="bag-add-outline" style="font-size: 1.6rem;" class="text-warning"></ion-icon>
                     <span style="font-size: 0.8rem; font-weight:500">Sakit</span>
@@ -135,7 +125,7 @@
         </div>
         <div class="col-3">
             <div class="card">
-                <div class="card-body text-center" style="padding: 10px 12px !important">
+                <div class="card-body text-center" style="padding: 10px 12px !important; display: flex; flex-direction: column; align-items: center;">
                     <span class="badge bg-danger" style="position: absolute; top:5px; right:8px; font-size:0.6rem;z-index:999">{{ $rekappresensi->jmlterlambat }}</span>
                     <ion-icon name="alarm-outline" style="font-size: 1.6rem;" class="text-danger"></ion-icon>
                     <span style="font-size: 0.8rem; font-weight:500">Telat</span>
@@ -166,14 +156,11 @@
                     @foreach ($historibulanini as $d)
                     <li>
                         <div class="item">
-                            @php
-                                $path = $d->foto_in ? Storage::url('uploads/absensi/'.$d->foto_in) : asset('assets/img/sample/avatar/avatar1.jpg');
-                            @endphp
-                            <img src="{{ url($path) }}" alt="image" class="image" style="width: 40px; height: 40px; object-fit: cover;">
+                            <img src="{{ $d->foto_in ? Storage::url('uploads/absensi/'.$d->foto_in) : asset('assets/img/sample/avatar/avatar1.jpg') }}" alt="image" class="image" style="width: 40px; height: 40px; object-fit: cover;">
                             <div class="in">
                                 <div>{{ date("d-m-Y",strtotime($d->tgl_presensi)) }}</div>
-                                <span class="badge badge-success">{{ $d->jam_in }}</span>
-                                <span class="badge badge-danger">{{ $d->jam_out != null ? $d->jam_out : 'Belum Absen' }}</span>
+                                <span class="badge badge-success">{{ $d->jam_in->format('H:i') }}</span>
+                                <span class="badge badge-danger">{{ $d->jam_out != null ? $d->jam_out->format('H:i') : 'Belum Absen' }}</span>
                             </div>
                         </div>
                     </li>
@@ -185,13 +172,13 @@
                     @foreach ($leaderboard as $d)
                     <li>
                         <div class="item">
-                            <img src="" alt="image" class="image">
+                            <img src="{{ $d->foto_in ? Storage::url('uploads/absensi/'.$d->foto_in) : asset('assets/img/sample/avatar/avatar1.jpg') }}" alt="image" class="image" style="width: 40px; height: 40px; object-fit: cover;">
                             <div class="in">
-                                <div><b>{{ $d->nama_lengkap }}</b><br>
-                                    <small class="text-muted">{{ $d->jabatan }}</small>
+                                <div><b>{{ $d->karyawan->nama_lengkap }}</b><br>
+                                    <small class="text-muted">{{ $d->karyawan->jabatan }}</small>
                                 </div>
-                                <span class="badge {{ $d->jam_in < "07:00" ? "bg-success" : "bg-danger" }}">
-                                    {{ $d->jam_in }}
+                                <span class="badge {{ $d->jam_in->format('H:i') < "07:00" ? "bg-success" : "bg-danger" }}">
+                                    {{ $d->jam_in->format('H:i') }}
                                 </span>
                             </div>
                         </div>
