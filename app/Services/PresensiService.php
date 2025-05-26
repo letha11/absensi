@@ -87,7 +87,7 @@ final class PresensiService
         $ket = $existingPresensi ? 'out' : 'in';
 
         // We need Karyawan->nik for the filename, fetch the Karyawan model first
-        $karyawan = Karyawan::find($email);
+        $karyawan = Karyawan::where('email', $email)->first();
         if (!$karyawan) {
             // This should ideally not happen if $email comes from an authenticated user
             return [

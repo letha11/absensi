@@ -44,7 +44,6 @@ final class PresensiController extends Controller
         $konfigurasiLokasi = KonfigurasiLokasi::first();
 
         if (!$konfigurasiLokasi) {
-            Log::error('Konfigurasi lokasi tidak ditemukan di database untuk halaman presensi create.');
             return Redirect::back()->with('error', 'Konfigurasi lokasi kantor belum diatur. Tidak dapat menampilkan halaman presensi.');
         }
 
