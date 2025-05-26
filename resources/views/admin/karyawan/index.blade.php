@@ -53,6 +53,7 @@
                                         <th>No.</th>
                                         <th>NIK</th>
                                         <th>Nama</th>
+                                        <th>Email</th>
                                         <th>Jabatan</th>
                                         <th>No. HP</th>
                                         <th>Foto</th>
@@ -65,6 +66,7 @@
                                             <td>{{ $loop->iteration + ($karyawans->currentPage() - 1) * $karyawans->perPage() }}</td>
                                             <td>{{ $karyawan->nik }}</td>
                                             <td>{{ $karyawan->nama_lengkap }}</td>
+                                            <td>{{ $karyawan->email }}</td>
                                             <td>{{ $karyawan->jabatan }}</td>
                                             <td>{{ $karyawan->no_hp }}</td>
                                             <td>
@@ -85,7 +87,7 @@
                                         </tr>
                                     @empty
                                         <tr>
-                                            <td colspan="7" class="text-center">Data Karyawan tidak ditemukan.</td>
+                                            <td colspan="8" class="text-center">Data Karyawan tidak ditemukan.</td>
                                         </tr>
                                     @endforelse
                                 </tbody>

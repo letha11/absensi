@@ -27,11 +27,18 @@ class UpdateKaryawanRequest extends FormRequest
     public function rules(): array
     {
         // NIK is obtained from the route parameter, not from the request body for validation purposes here
-        // $karyawanNik = $this->route('karyawan')->nik; 
+        $karyawanNik = $this->route('karyawan')->nik; 
 
         return [
             // 'nik' is not updatable via this form as it's a key, handled as read-only in view.
             'nama_lengkap' => 'required|string|max:255',
+            'email' => [
+                'required',
+                'string',
+                'email',
+                'max:255',
+                Rule::unique('karyawan', 'email')->ignore($karyawanNik, 'nik'),
+            ],
             'jabatan' => 'required|string|max:100',
             'no_hp' => 'required|string|max:15',
             'password' => 'nullable|string|min:6', // Password is optional

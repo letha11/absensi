@@ -1,7 +1,7 @@
 @extends('layouts.presensi')
 @section('content')
 <div class="section" id="user-section">
-    <div id="user-detail">
+    <div id="user-detail" class="d-flex align-items-center">
         <div class="avatar">
             @if (!empty(Auth::guard('karyawan')->user()->foto))
                 @php
@@ -12,9 +12,14 @@
                 <img src="assets/img/sample/avatar/avatar1.jpg" alt="avatar" class="imaged w64 rounded" style="height:60px; object-fit: cover;">
             @endif
         </div>
-        <div id="user-info">
+        <div id="user-info" class="flex-grow-1">
             <h2 id="user-name">{{ Auth::guard('karyawan')->user()->nama_lengkap }}</h2>
             <span id="user-role">{{ Auth::guard('karyawan')->user()->jabatan }}</span>
+        </div>
+        <div class="ms-auto">
+            <a href="/proseslogout" class="text-danger" style="font-size: 28px;">
+                <ion-icon name="log-out-outline"></ion-icon>
+            </a>
         </div>
     </div>
 </div>

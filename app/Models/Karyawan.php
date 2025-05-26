@@ -16,9 +16,9 @@ final class Karyawan extends Authenticatable
     use HasApiTokens, HasFactory, Notifiable;
 
     protected $table = "karyawan";
-    protected $primaryKey = "email";
-    public $incrementing = false;
-    protected $keyType = 'string';
+    protected $primaryKey = "id";
+    public $incrementing = true;
+    protected $keyType = 'int';
 
     protected $fillable = [
         'nik',
@@ -45,12 +45,23 @@ final class Karyawan extends Authenticatable
 
     /**
      * Get the name of the unique identifier for the user.
-     *
+     * This will now return 'id' to be used by Laravel's session management.
+     * The Auth::attempt method will still use 'email' for lookup based on credentials.
      * @return string
      */
     public function getAuthIdentifierName(): string
     {
-        return 'email';
+        return 'id';
+    }
+
+    /**
+     * Get the unique identifier for the user.
+     *
+     * @return mixed
+     */
+    public function getAuthIdentifier()
+    {
+        return $this->getKey();
     }
 
     public function presensi(): HasMany

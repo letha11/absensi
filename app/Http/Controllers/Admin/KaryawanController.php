@@ -111,12 +111,8 @@ final class KaryawanController extends Controller
                 'nama_lengkap' => $validatedData['nama_lengkap'],
                 'jabatan' => $validatedData['jabatan'],
                 'no_hp' => $validatedData['no_hp'],
+                'email' => $validatedData['email'],
             ];
-
-            // Assuming email is now part of validatedData (check UpdateKaryawanRequest if it needs to be added there too)
-            if (isset($validatedData['email'])) {
-                $updatePayload['email'] = $validatedData['email'];
-            }
 
             if (!empty($validatedData['password'])) {
                 $updatePayload['password'] = Hash::make($validatedData['password']);
