@@ -14,6 +14,11 @@ final class User extends Authenticatable
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
 
+    public const ROLE_DIREKTUR = 'Direktur';
+    public const ROLE_OPERASIONAL_DIREKTUR = 'Operasional Direktur';
+    public const ROLE_HRD = 'HRD';
+    public const ROLE_ADMIN = 'Admin';
+
     /**
      * The attributes that are mass assignable.
      *
@@ -23,6 +28,7 @@ final class User extends Authenticatable
         'name',
         'email',
         'password',
+        'role',
     ];
 
     /**
@@ -45,6 +51,32 @@ final class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'role' => 'string',
         ];
+    }
+
+    public function hasRole(string $role): bool
+    {    
+        return $this->role === $role;
+    }
+
+    public function isDirektur(): bool
+    {
+        return $this->hasRole(self::ROLE_DIREKTUR);
+    }
+
+    public function isOperasionalDirektur(): bool
+    {
+        return $this->hasRole(self::ROLE_OPERASIONAL_DIREKTUR);
+    }
+
+    public function isHrd(): bool
+    {
+        return $this->hasRole(self::ROLE_HRD);
+    }
+
+    public function isAdmin(): bool
+    {
+        return $this->hasRole(self::ROLE_ADMIN);
     }
 }

@@ -25,6 +25,10 @@ class DatabaseSeeder extends Seeder
             KaryawanSeeder::class,
             PresensiSeeder::class,
             PengajuanIzinSeeder::class,
+            // DirekturSeeder::class,
+            // OperasionalDirekturSeeder::class,
+            // HrdSeeder::class,
+            // AdminSeeder::class,
         ]);
     }
 }

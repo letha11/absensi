@@ -20,7 +20,7 @@
                     </span>
                 </a>
                 <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                    <a href="/proseslogoutadmin" class="dropdown-item">Logout</a>
+                    <a href="/panel/proseslogoutadmin" class="dropdown-item">Logout</a>
                 </div>
             </div>
         </div>
@@ -35,6 +35,8 @@
                         <span class="nav-link-title"> Home </span>
                     </a>
                 </li>
+
+                @if (Auth::user()->isDirektur() || Auth::user()->isHrd() || Auth::user()->isAdmin())
                 <li class="nav-item dropdown {{ request()->routeIs('admin.karyawan.*') ? 'active' : '' }}">
                     <a class="nav-link dropdown-toggle" href="#navbar-master-data" data-bs-toggle="dropdown" data-bs-auto-close="false" role="button" aria-expanded="{{ request()->routeIs('admin.karyawan.*') ? 'true' : 'false' }}">
                         <span class="nav-link-icon d-md-none d-lg-inline-block">
@@ -48,6 +50,9 @@
                         </a>
                     </div>
                 </li>
+                @endif
+
+                @if(Auth::user()->isDirektur() || Auth::user()->isOperasionalDirektur())
                 <li class="nav-item {{ request()->routeIs('admin.monitoring.presensi') ? 'active' : '' }}">
                     <a class="nav-link" href="{{ route('admin.monitoring.presensi') }}">
                         <span class="nav-link-icon d-md-none d-lg-inline-block">
@@ -56,6 +61,9 @@
                         <span class="nav-link-title"> Monitoring Presensi </span>
                     </a>
                 </li>
+                @endif
+
+                @if(Auth::user()->isDirektur() || Auth::user()->isOperasionalDirektur() || Auth::user()->isHrd())
                 <li class="nav-item {{ request()->routeIs('admin.laporan.presensi.index') ? 'active' : '' }}">
                     <a class="nav-link" href="{{ route('admin.laporan.presensi.index') }}">
                         <span class="nav-link-icon d-md-none d-lg-inline-block">
@@ -64,6 +72,9 @@
                         <span class="nav-link-title"> Laporan Presensi </span>
                     </a>
                 </li>
+                @endif
+
+                @if(Auth::user()->isDirektur() || Auth::user()->isOperasionalDirektur() || Auth::user()->isHrd() || Auth::user()->isAdmin())
                 <li class="nav-item {{ request()->routeIs('admin.pengajuan_izin.index') ? 'active' : '' }}">
                     <a class="nav-link" href="{{ route('admin.pengajuan_izin.index') }}">
                         <span class="nav-link-icon d-md-none d-lg-inline-block">
@@ -72,6 +83,9 @@
                         <span class="nav-link-title"> Persetujuan Izin/Sakit </span>
                     </a>
                 </li>
+                @endif
+
+                @if(Auth::user()->isDirektur())  {{-- Or other roles if needed --}}
                 <li class="nav-item dropdown {{ request()->routeIs('admin.konfigurasi.*') ? 'active' : '' }}">
                     <a class="nav-link dropdown-toggle" href="#navbar-konfigurasi" data-bs-toggle="dropdown" data-bs-auto-close="false" role="button" aria-expanded="{{ request()->routeIs('admin.konfigurasi.*') ? 'true' : 'false' }}">
                         <span class="nav-link-icon d-md-none d-lg-inline-block">
@@ -85,6 +99,7 @@
                         </a>
                     </div>
                 </li>
+                @endif
             </ul>
         </div>
     </div>

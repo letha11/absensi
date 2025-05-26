@@ -114,7 +114,7 @@
                     <div class="signature-block">
                         <p>Dibuat oleh,</p>
                         <p>(_________________________)</p>
-                        <p><strong>Admin</strong></p>
+                        <p><strong>{{ Auth::guard('user')->user()->role ?? 'Administrator' }}</strong></p>
                     </div>
                 </div>
 

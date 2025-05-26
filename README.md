@@ -66,15 +66,20 @@ Berikut adalah langkah-langkah untuk menginstal dan menjalankan proyek ini dari 
     Perintah ini akan membuat semua tabel yang dibutuhkan oleh aplikasi di database Anda.
 
 8.  **(PENTING!!!) Jalankan Seeder Database**
-    Jika proyek memiliki data awal (seeders) yang perlu diisi, jalankan perintah berikut:
+    Perintah ini akan membuat pengguna default untuk setiap role dalam sistem. Jalankan perintah berikut untuk mengisi data awal pengguna:
     ```bash
     php artisan db:seed --class=UserSeeder
     ```
-    Setelah menjalankan ini akan terbuat sebuah akun admin dengan identitas:
+    Pengguna default yang akan dibuat adalah sebagai berikut (semua menggunakan password default: `password`):
 
-    > email: admin@example.com
+    | Peran                   | Email (Username)          | Password   |
+    |-------------------------|---------------------------|------------|
+    | Direktur                | `direktur@example.com`    | `password` |
+    | Operasional Direktur    | `op_direktur@example.com` | `password` |
+    | HRD                     | `hrd@example.com`         | `password` |
+    | Admin                   | `admin@example.com`       | `password` |
+    
 
-    > password: password
 
 9.  **Buat Symbolic Link untuk Storage**
     ```bash
@@ -114,4 +119,47 @@ Berikut adalah contoh URL yang mungkin sering Anda gunakan. Sesuaikan path URL i
 -   **Login Admin:**
     -   URL: `http://127.0.0.1:8000/panel`
 -   **Dashboard Admin:**
-    -   URL: `http://127.0.0.1:8000/panel/dashboard` (setelah login)
+    -   URL: `http://127.0.0.1:8000/panel/dashboardadmin` (setelah login)
+
+## Peran Pengguna (User Roles)
+
+Sistem ini memiliki beberapa peran pengguna dengan hak akses yang berbeda, baik untuk panel admin maupun untuk fungsionalitas karyawan:
+
+### Panel Admin
+
+Pengguna yang login melalui `/panel` akan memiliki salah satu role berikut, dengan akses yang diatur di panel admin:
+
+*   **Direktur:**
+    *   Memiliki akses penuh ke semua fitur di panel admin.
+    *   Dapat mengelola data karyawan (tambah, edit, hapus).
+    *   Melihat monitoring presensi karyawan.
+    *   Mengakses dan mencetak laporan presensi.
+    *   Memberikan persetujuan atau penolakan untuk pengajuan izin/sakit.
+    *   Mengelola konfigurasi sistem (misalnya, lokasi kantor).
+
+*   **Operasional Direktur:**
+    *   Melihat monitoring presensi karyawan.
+    *   Mengakses dan mencetak laporan presensi.
+    *   Memberikan persetujuan atau penolakan untuk pengajuan izin/sakit.
+
+*   **HRD (Human Resources Development):**
+    *   Mengelola data karyawan (tambah, edit, hapus).
+    *   Mengakses dan mencetak laporan presensi.
+    *   Memberikan persetujuan atau penolakan untuk pengajuan izin/sakit.
+
+*   **Admin:**
+    *   Mengelola data karyawan (tambah, edit, hapus).
+    *   Memberikan persetujuan atau penolakan untuk pengajuan izin/sakit.
+
+### Pengguna Karyawan (`Karyawan`)
+
+Pengguna yang login melalui halaman login utama (`/`) adalah karyawan, dengan fungsionalitas sebagai berikut:
+
+*   **Melakukan Presensi:**
+    *   Mencatat kehadiran (check-in) dan kepulangan (check-out) berbasis lokasi GPS.
+*   **Melihat Riwayat Presensi:**
+    *   Mengakses data histori presensi pribadi.
+*   **Mengajukan Izin/Sakit:**
+    *   Membuat dan mengirim pengajuan izin atau sakit.
+*   **Mengelola Profil:**
+    *   Memperbarui informasi profil pribadi.

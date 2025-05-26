@@ -9,20 +9,21 @@ use App\Http\Controllers\Admin\LaporanController;
 use App\Http\Controllers\Admin\KonfigurasiLokasiController;
 use App\Http\Controllers\Admin\PengajuanIzinController;
 use Illuminate\Support\Facades\Route;
+use App\Models\User;
 
-Route::middleware(['guest:karyawan'])->group(function(){
-    Route::get('/', function () {
-        return view('auth.login');
-    })->name('login');
-    Route::post('/proseslogin', [AuthController::class, 'proseslogin']);
-});
+// Route::middleware(['guest:karyawan'])->group(function(){
+Route::get('/', function () {
+    return view('auth.login');
+})->name('login');
+Route::post('/proseslogin', [AuthController::class, 'proseslogin']);
+// });
 
-Route::middleware(['guest:user'])->group(function(){
-    Route::get('/panel', function () {
-        return view('auth.loginadmin');
-    })->name('loginadmin');
-    Route::post('/prosesloginadmin', [AuthController::class, 'prosesloginadmin']);
-});
+// Route::middleware(['guest:user'])->group(function(){
+Route::get('/panel', function () {
+    return view('auth.loginadmin');
+})->name('loginadmin');
+Route::post('/prosesloginadmin', [AuthController::class, 'prosesloginadmin']);
+// });
 
 Route::middleware(['auth:karyawan'])->group(function(){
     Route::get('/dashboard',[DashboardController::class,'index']);
@@ -46,32 +47,42 @@ Route::middleware(['auth:karyawan'])->group(function(){
     Route::post('/presensi/storeizin', [PresensiController::class, 'storeizin']);
 });
 
-Route::middleware(['auth:user'])->group(function(){
-    Route::get('/proseslogoutadmin', [AuthController::class, 'proseslogoutadmin']);
-    Route::get('/panel/dashboardadmin', [DashboardController::class, 'dashboardadmin']);
+Route::middleware(['auth:user'])->prefix('panel')->name('admin.')->group(function(){
+    Route::get('/dashboardadmin', [DashboardController::class, 'dashboardadmin'])->name('dashboard');
+    Route::get('/proseslogoutadmin', [AuthController::class, 'proseslogoutadmin'])->name('logout');
 
-    // Karyawan Master Data
-    Route::get('/panel/karyawan', [KaryawanController::class, 'index'])->name('admin.karyawan.index');
-    Route::get('/panel/karyawan/create', [KaryawanController::class, 'create'])->name('admin.karyawan.create');
-    Route::post('/panel/karyawan', [KaryawanController::class, 'store'])->name('admin.karyawan.store');
-    Route::get('/panel/karyawan/{karyawan:nik}/edit', [KaryawanController::class, 'edit'])->name('admin.karyawan.edit');
-    Route::put('/panel/karyawan/{karyawan:nik}', [KaryawanController::class, 'update'])->name('admin.karyawan.update');
-    Route::delete('/panel/karyawan/{karyawan:nik}', [KaryawanController::class, 'destroy'])->name('admin.karyawan.destroy');
+    // Karyawan Master Data: Direktur, HRD, Admin
+    Route::middleware(['role:'.User::ROLE_DIREKTUR.','.User::ROLE_HRD.','.User::ROLE_ADMIN])->group(function () {
+        Route::get('/karyawan', [KaryawanController::class, 'index'])->name('karyawan.index');
+        Route::get('/karyawan/create', [KaryawanController::class, 'create'])->name('karyawan.create');
+        Route::post('/karyawan', [KaryawanController::class, 'store'])->name('karyawan.store');
+        Route::get('/karyawan/{karyawan:nik}/edit', [KaryawanController::class, 'edit'])->name('karyawan.edit');
+        Route::put('/karyawan/{karyawan:nik}', [KaryawanController::class, 'update'])->name('karyawan.update');
+        Route::delete('/karyawan/{karyawan:nik}', [KaryawanController::class, 'destroy'])->name('karyawan.destroy');
+    });
 
-    // Monitoring Presensi
-    Route::get('/panel/monitoring/presensi', [MonitoringController::class, 'index'])->name('admin.monitoring.presensi');
+    // Monitoring Presensi: Direktur, Operasional Direktur
+    Route::middleware(['role:'.User::ROLE_DIREKTUR.','.User::ROLE_OPERASIONAL_DIREKTUR])->group(function () {
+        Route::get('/monitoring/presensi', [MonitoringController::class, 'index'])->name('monitoring.presensi');
+    });
 
-    // Laporan Presensi
-    Route::get('/panel/laporan/presensi', [LaporanController::class, 'index'])->name('admin.laporan.presensi.index');
-    Route::post('/panel/laporan/presensi/cetak-karyawan', [LaporanController::class, 'cetakLaporanKaryawan'])->name('admin.laporan.presensi.cetak_karyawan');
-    Route::post('/panel/laporan/presensi/cetak-rekap', [LaporanController::class, 'cetakRekapLaporan'])->name('admin.laporan.presensi.cetak_rekap');
+    // Laporan Presensi: Direktur, Operasional Direktur, HRD
+    Route::middleware(['role:'.User::ROLE_DIREKTUR.','.User::ROLE_OPERASIONAL_DIREKTUR.','.User::ROLE_HRD])->group(function () {
+        Route::get('/laporan/presensi', [LaporanController::class, 'index'])->name('laporan.presensi.index');
+        Route::post('/laporan/presensi/cetak-karyawan', [LaporanController::class, 'cetakLaporanKaryawan'])->name('laporan.presensi.cetak_karyawan');
+        Route::post('/laporan/presensi/cetak-rekap', [LaporanController::class, 'cetakRekapLaporan'])->name('laporan.presensi.cetak_rekap');
+    });
 
-    // Konfigurasi Lokasi Kantor
-    Route::get('/panel/konfigurasi/lokasi', [KonfigurasiLokasiController::class, 'index'])->name('admin.konfigurasi.lokasi.index');
-    Route::post('/panel/konfigurasi/lokasi', [KonfigurasiLokasiController::class, 'storeOrUpdate'])->name('admin.konfigurasi.lokasi.store');
+    // Konfigurasi Lokasi Kantor: Direktur (Adjust if other roles need access)
+    Route::middleware(['role:'.User::ROLE_DIREKTUR])->group(function () {
+        Route::get('/konfigurasi/lokasi', [KonfigurasiLokasiController::class, 'index'])->name('konfigurasi.lokasi.index');
+        Route::post('/konfigurasi/lokasi', [KonfigurasiLokasiController::class, 'storeOrUpdate'])->name('konfigurasi.lokasi.store');
+    });
 
-    // Persetujuan Izin/Sakit Karyawan
-    Route::get('/panel/pengajuan-izin', [PengajuanIzinController::class, 'index'])->name('admin.pengajuan_izin.index');
-    Route::post('/panel/pengajuan-izin/{id}/update-status', [PengajuanIzinController::class, 'updateStatus'])->name('admin.pengajuan_izin.update_status');
+    // Persetujuan Izin/Sakit Karyawan: Direktur, Operasional Direktur, HRD, Admin
+    Route::middleware(['role:'.User::ROLE_DIREKTUR.','.User::ROLE_OPERASIONAL_DIREKTUR.','.User::ROLE_HRD.','.User::ROLE_ADMIN])->group(function () {
+        Route::get('/pengajuan-izin', [PengajuanIzinController::class, 'index'])->name('pengajuan_izin.index');
+        Route::post('/pengajuan-izin/{id}/update-status', [PengajuanIzinController::class, 'updateStatus'])->name('pengajuan_izin.update_status');
+    });
 });
 
