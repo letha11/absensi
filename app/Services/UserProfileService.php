@@ -21,7 +21,7 @@ final class UserProfileService
      */
     public function updateUserProfile(string $email, array $data, ?UploadedFile $photoFile): bool
     {
-        $karyawan = Karyawan::find($email); // Find by email (new primary key)
+        $karyawan = Karyawan::where('email', $email)->first(); // Find by email (new primary key)
         if (!$karyawan) {
             return false;
         }
