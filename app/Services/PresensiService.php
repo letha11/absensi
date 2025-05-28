@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB; // Temporarily, to check existing presence. Will be replaced by Eloquent.
 use Illuminate\Support\Facades\Log;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Config; // Added for accessing config
 
 final class PresensiService
 {
@@ -39,6 +40,35 @@ final class PresensiService
     }
 
     /**
+     * Calculate points based on check-in time.
+     *
+     * @param Carbon $jamIn Actual check-in time
+     * @return int Points awarded
+     */
+    private function calculatePoints(Carbon $jamIn): int
+    {
+        $defaultStartTimeString = Config::get('presensi.default_start_time', '07:00:00');
+        $defaultStartTime = Carbon::createFromTimeString($defaultStartTimeString);
+
+        // Before Time: 15 minutes or more before default_start_time
+        if ($jamIn->lte($defaultStartTime->copy()->subMinutes(15))) {
+            return 2;
+        }
+
+        // On-Time: Less than 15 minutes before or exactly at default_start_time
+        if ($jamIn->gt($defaultStartTime->copy()->subMinutes(15)) && $jamIn->lte($defaultStartTime)) {
+            return 1;
+        }
+
+        // Late: After default_start_time
+        if ($jamIn->gt($defaultStartTime)) {
+            return -1;
+        }
+
+        return 0; // Should not happen if logic is correct
+    }
+
+    /**
      * Store presence data (clock in/out).
      *
      * @param string $email Karyawan's email
@@ -49,7 +79,7 @@ final class PresensiService
     public function storePresensi(string $email, string $lokasi, string $imageBase64): array
     {
         $today = Carbon::now()->toDateString();
-        $currentTime = Carbon::now()->toTimeString();
+        $currentTime = Carbon::now(); // Use Carbon instance for easier comparison
 
         $konfigurasiLokasi = KonfigurasiLokasi::first();
 
@@ -127,7 +157,7 @@ final class PresensiService
                     'type' => 'out'
                 ];
             }
-            $existingPresensi->jam_out = $currentTime;
+            $existingPresensi->jam_out = $currentTime->toTimeString(); // Store as string H:i:s
             $existingPresensi->foto_out = $fileName; // Storing only filename
             $existingPresensi->lokasi_out = $lokasi;
             
@@ -140,12 +170,15 @@ final class PresensiService
                 ];
             }
         } else { // Clock In
+            $points = $this->calculatePoints($currentTime); // Calculate points
+
             $newPresensi = Presensi::create([
                 'karyawan_email' => $email,
                 'tgl_presensi' => $today,
-                'jam_in' => $currentTime,
+                'jam_in' => $currentTime->toTimeString(), // Store as string H:i:s
                 'foto_in' => $fileName, // Storing only filename
                 'lokasi_in' => $lokasi,
+                'point' => $points, // Store points
             ]);
 
             if ($newPresensi) {

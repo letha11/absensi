@@ -339,6 +339,7 @@
     <script src="{{ asset('tabler/libs/jsvectormap/dist/js/jsvectormap.min.js?1744816593') }}" defer></script>
     <script src="{{ asset('tabler/libs/jsvectormap/dist/maps/world.js?1744816593') }}" defer></script>
     <script src="{{ asset('tabler/libs/jsvectormap/dist/maps/world-merc.js?1744816593') }}" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <!-- END PAGE LIBRARIES -->
     <!-- BEGIN GLOBAL MANDATORY SCRIPTS -->
     <script src="{{ asset('tabler/dist/js/tabler.min.js?1744816593') }}" defer></script>

@@ -23,6 +23,6 @@ class PresensiSeeder extends Seeder
         }
 
         // Create 50 presensi records, randomly assigned to existing Karyawan
-        Presensi::factory(50)->create();
+        Presensi::factory(200)->create();
     }
 }

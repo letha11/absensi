@@ -25,6 +25,7 @@ final class Presensi extends Model
         'foto_out',
         'lokasi_in',
         'lokasi_out',
+        'point',
     ];
 
     // Define casts for attributes
@@ -34,6 +35,7 @@ final class Presensi extends Model
             'tgl_presensi' => 'date',
             'jam_in' => 'datetime:H:i:s', // Or just 'datetime' if you store date too
             'jam_out' => 'datetime:H:i:s', // Or just 'datetime'
+            'point' => 'integer',
         ];
     }
 
