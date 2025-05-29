@@ -12,7 +12,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>Sign in with illustration - Tabler - Premium and Open Source dashboard template with responsive and high quality UI.</title>
+    <title>Login - E-Presensi PT. DELTA PRATAMA KARYA</title>
     <!-- BEGIN GLOBAL MANDATORY STYLES -->
     <link href="{{ asset('tabler/dist/css/tabler.css?1744816591') }}" rel="stylesheet" />
     <!-- END GLOBAL MANDATORY STYLES -->
@@ -43,7 +43,9 @@
           <div class="col-lg">
             <div class="container-tight">
               <div class="text-center mb-4">
-                <!-- BEGIN NAVBAR LOGO --><a href="." class="navbar-brand navbar-brand-autodark"
+                <!-- BEGIN NAVBAR LOGO -->
+                <img src="{{ asset('assets/img/web-logo.png') }}" alt="Logo" class="img-fluid mb-6" style="width: 200px;">
+                {{-- <a href="." class="navbar-brand navbar-brand-autodark"
                   ><svg xmlns="http://www.w3.org/2000/svg" width="110" height="32" viewBox="0 0 232 68" class="navbar-brand-image">
                     <path
                       d="M64.6 16.2C63 9.9 58.1 5 51.8 3.4 40 1.5 28 1.5 16.2 3.4 9.9 5 5 9.9 3.4 16.2 1.5 28 1.5 40 3.4 51.8 5 58.1 9.9 63 16.2 64.6c11.8 1.9 23.8 1.9 35.6 0C58.1 63 63 58.1 64.6 51.8c1.9-11.8 1.9-23.8 0-35.6zM33.3 36.3c-2.8 4.4-6.6 8.2-11.1 11-1.5.9-3.3.9-4.8.1s-2.4-2.3-2.5-4c0-1.7.9-3.3 2.4-4.1 2.3-1.4 4.4-3.2 6.1-5.3-1.8-2.1-3.8-3.8-6.1-5.3-2.3-1.3-3-4.2-1.7-6.4s4.3-2.9 6.5-1.6c4.5 2.8 8.2 6.5 11.1 10.9 1 1.4 1 3.3.1 4.7zM49.2 46H37.8c-2.1 0-3.8-1-3.8-3s1.7-3 3.8-3h11.4c2.1 0 3.8 1 3.8 3s-1.7 3-3.8 3z"
@@ -57,7 +59,7 @@
                       fill="#4a4a4a"
                     /></svg></a
                 ><!-- END NAVBAR LOGO -->
-              </div>
+              </div> --}}
               <div class="card card-md">
                 <div class="card-body">
                   <h2 class="h2 text-center mb-4">Silahkan Login</h2>
@@ -75,9 +77,6 @@
                     <div class="mb-2">
                       <label class="form-label">
                         Password
-                        <span class="form-label-description">
-                          <a href="./forgot-password.html">I forgot password</a>
-                        </span>
                       </label>
                       <div class="input-group input-group-flat">
                         <input type="password" name="password" class="form-control" placeholder="Your password" autocomplete="off" />
@@ -287,275 +286,6 @@
           </div>
         </div>
       </div>
-    </div>
-    <div class="settings">
-      <a href="#" class="btn btn-floating btn-icon btn-primary" data-bs-toggle="offcanvas" data-bs-target="#offcanvasSettings">
-        <!-- Download SVG icon from http://tabler.io/icons/icon/brush -->
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          class="icon icon-1"
-        >
-          <path d="M3 21v-4a4 4 0 1 1 4 4h-4" />
-          <path d="M21 3a16 16 0 0 0 -12.8 10.2" />
-          <path d="M21 3a16 16 0 0 1 -10.2 12.8" />
-          <path d="M10.6 9a9 9 0 0 1 4.4 4.4" />
-        </svg>
-      </a>
-      <form class="offcanvas offcanvas-start offcanvas-narrow" tabindex="-1" id="offcanvasSettings">
-        <div class="offcanvas-header">
-          <h2 class="offcanvas-title">Theme Builder</h2>
-          <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-        </div>
-        <div class="offcanvas-body d-flex flex-column">
-          <div>
-            <div class="mb-4">
-              <label class="form-label">Color mode</label>
-              <p class="form-hint">Choose the color mode for your app.</p>
-              <label class="form-check">
-                <div class="form-selectgroup-item">
-                  <input type="radio" name="theme" value="light" class="form-check-input" checked />
-                  <div class="form-check-label">Light</div>
-                </div>
-              </label>
-              <label class="form-check">
-                <div class="form-selectgroup-item">
-                  <input type="radio" name="theme" value="dark" class="form-check-input" />
-                  <div class="form-check-label">Dark</div>
-                </div>
-              </label>
-            </div>
-            <div class="mb-4">
-              <label class="form-label">Color scheme</label>
-              <p class="form-hint">The perfect color mode for your app.</p>
-              <div class="row g-2">
-                <div class="col-auto">
-                  <label class="form-colorinput">
-                    <input name="theme-primary" type="radio" value="blue" class="form-colorinput-input" />
-                    <span class="form-colorinput-color bg-blue"></span>
-                  </label>
-                </div>
-                <div class="col-auto">
-                  <label class="form-colorinput">
-                    <input name="theme-primary" type="radio" value="azure" class="form-colorinput-input" />
-                    <span class="form-colorinput-color bg-azure"></span>
-                  </label>
-                </div>
-                <div class="col-auto">
-                  <label class="form-colorinput">
-                    <input name="theme-primary" type="radio" value="indigo" class="form-colorinput-input" />
-                    <span class="form-colorinput-color bg-indigo"></span>
-                  </label>
-                </div>
-                <div class="col-auto">
-                  <label class="form-colorinput">
-                    <input name="theme-primary" type="radio" value="purple" class="form-colorinput-input" />
-                    <span class="form-colorinput-color bg-purple"></span>
-                  </label>
-                </div>
-                <div class="col-auto">
-                  <label class="form-colorinput">
-                    <input name="theme-primary" type="radio" value="pink" class="form-colorinput-input" />
-                    <span class="form-colorinput-color bg-pink"></span>
-                  </label>
-                </div>
-                <div class="col-auto">
-                  <label class="form-colorinput">
-                    <input name="theme-primary" type="radio" value="red" class="form-colorinput-input" />
-                    <span class="form-colorinput-color bg-red"></span>
-                  </label>
-                </div>
-                <div class="col-auto">
-                  <label class="form-colorinput">
-                    <input name="theme-primary" type="radio" value="orange" class="form-colorinput-input" />
-                    <span class="form-colorinput-color bg-orange"></span>
-                  </label>
-                </div>
-                <div class="col-auto">
-                  <label class="form-colorinput">
-                    <input name="theme-primary" type="radio" value="yellow" class="form-colorinput-input" />
-                    <span class="form-colorinput-color bg-yellow"></span>
-                  </label>
-                </div>
-                <div class="col-auto">
-                  <label class="form-colorinput">
-                    <input name="theme-primary" type="radio" value="lime" class="form-colorinput-input" />
-                    <span class="form-colorinput-color bg-lime"></span>
-                  </label>
-                </div>
-                <div class="col-auto">
-                  <label class="form-colorinput">
-                    <input name="theme-primary" type="radio" value="green" class="form-colorinput-input" />
-                    <span class="form-colorinput-color bg-green"></span>
-                  </label>
-                </div>
-                <div class="col-auto">
-                  <label class="form-colorinput">
-                    <input name="theme-primary" type="radio" value="teal" class="form-colorinput-input" />
-                    <span class="form-colorinput-color bg-teal"></span>
-                  </label>
-                </div>
-                <div class="col-auto">
-                  <label class="form-colorinput">
-                    <input name="theme-primary" type="radio" value="cyan" class="form-colorinput-input" />
-                    <span class="form-colorinput-color bg-cyan"></span>
-                  </label>
-                </div>
-              </div>
-            </div>
-            <div class="mb-4">
-              <label class="form-label">Font family</label>
-              <p class="form-hint">Choose the font family that fits your app.</p>
-              <div>
-                <label class="form-check">
-                  <div class="form-selectgroup-item">
-                    <input type="radio" name="theme-font" value="sans-serif" class="form-check-input" checked />
-                    <div class="form-check-label">Sans-serif</div>
-                  </div>
-                </label>
-                <label class="form-check">
-                  <div class="form-selectgroup-item">
-                    <input type="radio" name="theme-font" value="serif" class="form-check-input" />
-                    <div class="form-check-label">Serif</div>
-                  </div>
-                </label>
-                <label class="form-check">
-                  <div class="form-selectgroup-item">
-                    <input type="radio" name="theme-font" value="monospace" class="form-check-input" />
-                    <div class="form-check-label">Monospace</div>
-                  </div>
-                </label>
-                <label class="form-check">
-                  <div class="form-selectgroup-item">
-                    <input type="radio" name="theme-font" value="comic" class="form-check-input" />
-                    <div class="form-check-label">Comic</div>
-                  </div>
-                </label>
-              </div>
-            </div>
-            <div class="mb-4">
-              <label class="form-label">Theme base</label>
-              <p class="form-hint">Choose the gray shade for your app.</p>
-              <div>
-                <label class="form-check">
-                  <div class="form-selectgroup-item">
-                    <input type="radio" name="theme-base" value="slate" class="form-check-input" />
-                    <div class="form-check-label">Slate</div>
-                  </div>
-                </label>
-                <label class="form-check">
-                  <div class="form-selectgroup-item">
-                    <input type="radio" name="theme-base" value="gray" class="form-check-input" checked />
-                    <div class="form-check-label">Gray</div>
-                  </div>
-                </label>
-                <label class="form-check">
-                  <div class="form-selectgroup-item">
-                    <input type="radio" name="theme-base" value="zinc" class="form-check-input" />
-                    <div class="form-check-label">Zinc</div>
-                  </div>
-                </label>
-                <label class="form-check">
-                  <div class="form-selectgroup-item">
-                    <input type="radio" name="theme-base" value="neutral" class="form-check-input" />
-                    <div class="form-check-label">Neutral</div>
-                  </div>
-                </label>
-                <label class="form-check">
-                  <div class="form-selectgroup-item">
-                    <input type="radio" name="theme-base" value="stone" class="form-check-input" />
-                    <div class="form-check-label">Stone</div>
-                  </div>
-                </label>
-              </div>
-            </div>
-            <div class="mb-4">
-              <label class="form-label">Corner Radius</label>
-              <p class="form-hint">Choose the border radius factory for your app.</p>
-              <div>
-                <label class="form-check">
-                  <div class="form-selectgroup-item">
-                    <input type="radio" name="theme-radius" value="0" class="form-check-input" />
-                    <div class="form-check-label">0</div>
-                  </div>
-                </label>
-                <label class="form-check">
-                  <div class="form-selectgroup-item">
-                    <input type="radio" name="theme-radius" value="0.5" class="form-check-input" />
-                    <div class="form-check-label">0.5</div>
-                  </div>
-                </label>
-                <label class="form-check">
-                  <div class="form-selectgroup-item">
-                    <input type="radio" name="theme-radius" value="1" class="form-check-input" checked />
-                    <div class="form-check-label">1</div>
-                  </div>
-                </label>
-                <label class="form-check">
-                  <div class="form-selectgroup-item">
-                    <input type="radio" name="theme-radius" value="1.5" class="form-check-input" />
-                    <div class="form-check-label">1.5</div>
-                  </div>
-                </label>
-                <label class="form-check">
-                  <div class="form-selectgroup-item">
-                    <input type="radio" name="theme-radius" value="2" class="form-check-input" />
-                    <div class="form-check-label">2</div>
-                  </div>
-                </label>
-              </div>
-            </div>
-          </div>
-          <div class="mt-auto space-y">
-            <button type="button" class="btn w-100" id="reset-changes">
-              <!-- Download SVG icon from http://tabler.io/icons/icon/rotate -->
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                class="icon icon-1"
-              >
-                <path d="M19.95 11a8 8 0 1 0 -.5 4m.5 5v-5h-5" />
-              </svg>
-              Reset changes
-            </button>
-            <a href="#" class="btn btn-primary w-100" data-bs-dismiss="offcanvas">
-              <!-- Download SVG icon from http://tabler.io/icons/icon/settings -->
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                class="icon icon-1"
-              >
-                <path
-                  d="M10.325 4.317c.426 -1.756 2.924 -1.756 3.35 0a1.724 1.724 0 0 0 2.573 1.066c1.543 -.94 3.31 .826 2.37 2.37a1.724 1.724 0 0 0 1.065 2.572c1.756 .426 1.756 2.924 0 3.35a1.724 1.724 0 0 0 -1.066 2.573c.94 1.543 -.826 3.31 -2.37 2.37a1.724 1.724 0 0 0 -2.572 1.065c-.426 1.756 -2.924 1.756 -3.35 0a1.724 1.724 0 0 0 -2.573 -1.066c-1.543 .94 -3.31 -.826 -2.37 -2.37a1.724 1.724 0 0 0 -1.065 -2.572c-1.756 -.426 -1.756 -2.924 0 -3.35a1.724 1.724 0 0 0 1.066 -2.573c-.94 -1.543 .826 -3.31 2.37 -2.37c1 .608 2.296 .07 2.572 -1.065z"
-                />
-                <path d="M9 12a3 3 0 1 0 6 0a3 3 0 0 0 -6 0" />
-              </svg>
-              Save settings
-            </a>
-          </div>
-        </div>
-      </form>
     </div>
     <!-- BEGIN GLOBAL MANDATORY SCRIPTS -->
     <script src="{{ asset('tabler/dist/js/tabler.min.js?1744816591') }}" defer></script>
