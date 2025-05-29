@@ -84,6 +84,7 @@
               </div>
 
               <!-- Point Chart Card -->
+              @if(Auth::user()->role === \App\Models\User::ROLE_DIREKTUR)
               <div class="col-12">
                 <div class="card">
                   <div class="card-header">
@@ -120,10 +121,12 @@
                 </div>
               </div>
               <!-- End Point Chart Card -->
+              @endif
               
         </div>
 
         <!-- Leaderboard Row -->
+        @if(Auth::user()->role === \App\Models\User::ROLE_DIREKTUR)
         <div class="row row-deck row-cards mt-3">
             <div class="col-12">
                 <div class="card">
@@ -173,6 +176,7 @@
             </div>
         </div>
         <!-- End Leaderboard Row -->
+        @endif
 
     </div>
 </div>            
