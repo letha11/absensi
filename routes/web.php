@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\MonitoringController;
 use App\Http\Controllers\Admin\LaporanController;
 use App\Http\Controllers\Admin\KonfigurasiLokasiController;
 use App\Http\Controllers\Admin\PengajuanIzinController;
+use App\Http\Controllers\Admin\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Models\User;
 
@@ -50,6 +51,8 @@ Route::middleware(['auth:karyawan'])->group(function(){
 Route::middleware(['auth:user'])->prefix('panel')->name('admin.')->group(function(){
     Route::get('/dashboardadmin', [DashboardController::class, 'dashboardadmin'])->name('dashboard');
     Route::get('/proseslogoutadmin', [AuthController::class, 'proseslogoutadmin'])->name('logout');
+    Route::get('/ganti-password', [ProfileController::class, 'showChangePasswordForm'])->name('admin.password.change');
+    Route::post('/ganti-password', [ProfileController::class, 'changePassword'])->name('admin.password.update');
 
     // Karyawan Master Data: Direktur, HRD, Admin
     Route::middleware(['role:'.User::ROLE_DIREKTUR.','.User::ROLE_HRD.','.User::ROLE_ADMIN])->group(function () {
@@ -84,5 +87,6 @@ Route::middleware(['auth:user'])->prefix('panel')->name('admin.')->group(functio
         Route::get('/pengajuan-izin', [PengajuanIzinController::class, 'index'])->name('pengajuan_izin.index');
         Route::post('/pengajuan-izin/{id}/update-status', [PengajuanIzinController::class, 'updateStatus'])->name('pengajuan_izin.update_status');
     });
+
 });
 

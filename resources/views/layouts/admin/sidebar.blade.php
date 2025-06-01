@@ -20,6 +20,8 @@
                     </span>
                 </a>
                 <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                    <a href="/panel/ganti-password" class="dropdown-item">Ganti Password</a>
+                    <div class="dropdown-divider"></div>
                     <a href="/panel/proseslogoutadmin" class="dropdown-item">Logout</a>
                 </div>
             </div>
