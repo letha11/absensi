@@ -22,12 +22,11 @@ class RedirectIfAuthenticated
 
         foreach ($guards as $guard) {
             if (Auth::guard('karyawan')->check()) {
-                // Redirect ke HOME yang didefinisikan di RouteServiceProvider
-                return redirect(RouteServiceProvider::HOME);
+                return redirect()->route('login');
             }
 
             if (Auth::guard('user')->check()) {
-                return redirect(RouteServiceProvider::HOMEADMIN);
+                return redirect()->route('loginadmin');
             }
             return $next($request);
         }

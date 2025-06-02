@@ -13,7 +13,7 @@
 @section('content')
 <div class="row" style="margin-top:70px">
     <div class="col">
-        <form method="POST" action="/presensi/storeizin" id="formIzin">
+        <form method="POST" action="{{ route('karyawan.izin.store') }}" id="formIzin">
             @csrf
                     <div class="form-group">
                         <!-- Gunakan class 'datepicker' khusus Materialize -->

@@ -16,43 +16,43 @@ use App\Models\User;
 Route::get('/', function () {
     return view('auth.login');
 })->name('login');
-Route::post('/proseslogin', [AuthController::class, 'proseslogin']);
+Route::post('/proseslogin', [AuthController::class, 'proseslogin'])->name('login.process');
 // });
 
 // Route::middleware(['guest:user'])->group(function(){
 Route::get('/panel', function () {
     return view('auth.loginadmin');
 })->name('loginadmin');
-Route::post('/prosesloginadmin', [AuthController::class, 'prosesloginadmin']);
+Route::post('/prosesloginadmin', [AuthController::class, 'prosesloginadmin'])->name('loginadmin.process');
 // });
 
 Route::middleware(['auth:karyawan'])->group(function(){
-    Route::get('/dashboard',[DashboardController::class,'index']);
-    Route::get('/proseslogout', [AuthController::class, 'proseslogout']);
+    Route::get('/dashboard',[DashboardController::class,'index'])->name('karyawan.dashboard');
+    Route::get('/proseslogout', [AuthController::class, 'proseslogout'])->name('karyawan.logout');
 
     //presensi
-    Route::get('/presensi/create',[PresensiController::class,'create']);
-    Route::post('/presensi/store', [PresensiController::class, 'store']);
+    Route::get('/presensi/create',[PresensiController::class,'create'])->name('karyawan.presensi.create');
+    Route::post('/presensi/store', [PresensiController::class, 'store'])->name('karyawan.presensi.store');
 
     //Edit Profile
-    Route::get('/editprofile', [PresensiController::class, 'editprofile']);
-    Route::post('/presensi/updateprofile', [PresensiController::class, 'updateprofile']);
+    Route::get('/editprofile', [PresensiController::class, 'editprofile'])->name('karyawan.profile.edit');
+    Route::post('/presensi/updateprofile', [PresensiController::class, 'updateprofile'])->name('karyawan.profile.update');
 
     //Histori
-    Route::get('/presensi/histori',[PresensiController::class, 'histori']);
-    Route::post('/gethistori', [PresensiController::class, 'gethistori']);
+    Route::get('/presensi/histori',[PresensiController::class, 'histori'])->name('karyawan.presensi.histori');
+    Route::post('/gethistori', [PresensiController::class, 'gethistori'])->name('karyawan.presensi.gethistori');
 
     //Izin
-    Route::get('/presensi/izin', [PresensiController::class, 'izin']);
-    Route::get('/presensi/buatizin', [PresensiController::class, 'buatizin']);
-    Route::post('/presensi/storeizin', [PresensiController::class, 'storeizin']);
+    Route::get('/presensi/izin', [PresensiController::class, 'izin'])->name('karyawan.izin.index');
+    Route::get('/presensi/buatizin', [PresensiController::class, 'buatizin'])->name('karyawan.izin.create');
+    Route::post('/presensi/storeizin', [PresensiController::class, 'storeizin'])->name('karyawan.izin.store');
 });
 
 Route::middleware(['auth:user'])->prefix('panel')->name('admin.')->group(function(){
     Route::get('/dashboardadmin', [DashboardController::class, 'dashboardadmin'])->name('dashboard');
     Route::get('/proseslogoutadmin', [AuthController::class, 'proseslogoutadmin'])->name('logout');
-    Route::get('/ganti-password', [ProfileController::class, 'showChangePasswordForm'])->name('admin.password.change');
-    Route::post('/ganti-password', [ProfileController::class, 'changePassword'])->name('admin.password.update');
+    Route::get('/ganti-password', [ProfileController::class, 'showChangePasswordForm'])->name('password.change');
+    Route::post('/ganti-password', [ProfileController::class, 'changePassword'])->name('password.update');
 
     // Karyawan Master Data: Direktur, HRD, Admin
     Route::middleware(['role:'.User::ROLE_DIREKTUR.','.User::ROLE_HRD.','.User::ROLE_ADMIN])->group(function () {

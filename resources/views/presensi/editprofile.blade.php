@@ -30,7 +30,7 @@
         @endif
     </div>
 </div>
-<form action="/presensi/updateprofile" method="POST" enctype="multipart/form-data">
+<form action="{{ route('karyawan.profile.update') }}" method="POST" enctype="multipart/form-data">
     @csrf
     <div class="col">
         <div class="form-group boxed">

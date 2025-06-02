@@ -162,7 +162,7 @@ final class PresensiController extends Controller
         );
 
         if ($pengajuanIzin) {
-            return redirect('/presensi/izin')->with(['success' => 'Data Berhasil Tersimpan']);
+            return redirect()->route('karyawan.izin.index')->with(['success' => 'Data Berhasil Tersimpan']);
         }
 
         return redirect()->back()->withInput()->with(['error' => 'Data Gagal Disimpan']);

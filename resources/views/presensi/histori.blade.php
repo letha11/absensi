@@ -63,7 +63,7 @@
             var tahun = $("#tahun").val();
             $.ajax({
                 type: 'POST',
-                url: '/gethistori',
+                url: '{{ route("karyawan.presensi.gethistori") }}',
                 data: {
                     _token: "{{ csrf_token() }}",
                     bulan: bulan,

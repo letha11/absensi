@@ -227,7 +227,7 @@
 
                         $.ajax({
                             type:'POST',
-                            url: '/presensi/store',
+                            url: '{{ route("karyawan.presensi.store") }}',
                             data: {
                                 _token: "{{ csrf_token() }}",
                                 image: image,

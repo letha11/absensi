@@ -68,7 +68,7 @@
                     <p>{{ Session::get('warning') }}</p>
                   </div> 
                   @endif
-                  <form action="/prosesloginadmin" method="post" autocomplete="off" novalidate>
+                  <form action="{{ route('loginadmin.process') }}" method="post" autocomplete="off" novalidate>
                     @csrf
                     <div class="mb-3">
                       <label class="form-label">Email address</label>

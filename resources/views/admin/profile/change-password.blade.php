@@ -17,6 +17,9 @@
             <div class="row row-cards">
                 <div class="col-md-6">
                     <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Ganti Password</h3>
+                        </div>
                         <div class="card-body">
                             @if (session('success'))
                                 <div class="alert alert-success alert-dismissible" role="alert">
@@ -34,7 +37,7 @@
                                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                                 </div>
                             @endif
-                            <form action="/panel/ganti-password" method="POST">
+                            <form action="{{ route('admin.password.update') }}" method="POST">
                                 @csrf
                                 <div class="mb-3">
                                     <label class="form-label required">Password Saat Ini</label>

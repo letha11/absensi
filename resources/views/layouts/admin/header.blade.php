@@ -16,16 +16,16 @@
                 </a>
                 <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
                     {{-- <a href="#" class="dropdown-item">Profile</a> --}}
-                    <a href="/panel/ganti-password" class="dropdown-item">Ganti Password</a>
+                    <a href="{{ route('admin.password.change') }}" class="dropdown-item">Ganti Password</a>
                     <div class="dropdown-divider"></div>
-                    <a href="/panel/proseslogoutadmin" class="dropdown-item">Logout</a>
+                    <a href="{{ route('admin.logout') }}" class="dropdown-item">Logout</a>
                 </div>
             </div>
         </div>
         <div class="collapse navbar-collapse" id="navbar-menu">
             <!-- Main navbar menu items can go here if needed, or leave empty if header is just for user actions -->
             <ul class="navbar-nav">
-                <li class="nav-item">
+                <li class="nav-item {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
                     {{-- <a class="nav-link" href="./">
                         <span class="nav-link-icon d-md-none d-lg-inline-block">
                             <svg>...</svg>

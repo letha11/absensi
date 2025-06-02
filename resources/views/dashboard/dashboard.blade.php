@@ -17,7 +17,7 @@
             <span id="user-role">{{ Auth::guard('karyawan')->user()->jabatan }}</span>
         </div>
         <div class="ms-auto">
-            <a href="/proseslogout" class="text-danger" style="font-size: 28px;">
+            <a href="{{ route('karyawan.logout') }}" class="text-danger" style="font-size: 28px;">
                 <ion-icon name="log-out-outline"></ion-icon>
             </a>
         </div>
@@ -30,7 +30,7 @@
             <div class="list-menu">
                 <div class="item-menu text-center">
                     <div class="menu-icon">
-                        <a href="/editprofile" class="green" style="font-size: 40px;">
+                        <a href="{{ route('karyawan.profile.edit') }}" class="green" style="font-size: 40px;">
                             <ion-icon name="person-sharp"></ion-icon>
                         </a>
                     </div>
@@ -40,7 +40,7 @@
                 </div>
                 <div class="item-menu text-center">
                     <div class="menu-icon">
-                        <a href="/presensi/izin" class="danger" style="font-size: 40px;">
+                        <a href="{{ route('karyawan.izin.index') }}" class="danger" style="font-size: 40px;">
                             <ion-icon name="calendar-number"></ion-icon>
                         </a>
                     </div>
@@ -50,7 +50,7 @@
                 </div>
                 <div class="item-menu text-center">
                     <div class="menu-icon">
-                        <a href="/presensi/histori" class="warning" style="font-size: 40px;">
+                        <a href="{{ route('karyawan.presensi.histori') }}" class="warning" style="font-size: 40px;">
                             <ion-icon name="document-text"></ion-icon>
                         </a>
                     </div>

@@ -6,7 +6,7 @@
         </button>
         <!-- END NAVBAR TOGGLER -->
         <!-- BEGIN NAVBAR LOGO -->
-        <a class="navbar-brand navbar-brand-autodark" href="/panel/dashboardadmin">
+        <a class="navbar-brand navbar-brand-autodark" href="{{ route('admin.dashboard') }}">
             <span class="h2 text-white">Presensi GPS</span>
         </a>
         <!-- END NAVBAR LOGO -->
@@ -20,18 +20,19 @@
                     </span>
                 </a>
                 <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                    <a href="/panel/ganti-password" class="dropdown-item">Ganti Password</a>
+                    <a href="{{ route('admin.password.change') }}" class="dropdown-item">Ganti Password</a>
                     <div class="dropdown-divider"></div>
-                    <a href="/panel/proseslogoutadmin" class="dropdown-item">Logout</a>
+                    <a href="{{ route('admin.logout') }}" class="dropdown-item">Logout</a>
                 </div>
             </div>
         </div>
 
         <div class="collapse navbar-collapse" id="sidebar-menu">
             <ul class="navbar-nav pt-lg-3">
-                <li class="nav-item {{ request()->is('panel/dashboardadmin') ? 'active' : '' }}">
-                    <a class="nav-link" href="/panel/dashboardadmin">
-                        <span class="nav-link-icon d-md-none d-lg-inline-block">
+                <li class="nav-item {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
+                    <a class="nav-link" href="{{ route('admin.dashboard') }}">
+                        <span
+                            class="nav-link-icon d-md-none d-lg-inline-block {{ request()->routeIs('admin.dashboard') ? 'text-primary' : '' }}">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-1"><path d="M5 12l-2 0l9 -9l9 9l-2 0" /><path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" /><path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" /></svg>
                         </span>
                         <span class="nav-link-title"> Home </span>
