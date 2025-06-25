@@ -69,7 +69,7 @@ final class KaryawanController extends Controller
                 $photoFile = $request->file('foto');
                 $directory = 'uploads/karyawan'; // Path relative to the 'public' disk's root
                 // Use NIK for the filename to ensure uniqueness and predictability
-                $photoName = $validatedData['nik'] . '.' . $photoFile->getClientOriginalExtension();
+                $photoName = $validatedData['nik'] . '_' . uniqid() . '.' . $photoFile->getClientOriginalExtension();
                 
                 // Store the new photo on the 'public' disk
                 $storedPath = $photoFile->storeAs($directory, $photoName, 'public');
@@ -122,7 +122,7 @@ final class KaryawanController extends Controller
                 $photoFile = $request->file('foto');
                 $directory = 'uploads/karyawan'; // Path relative to the 'public' disk's root
                 // Use Karyawan's NIK for the filename
-                $photoName = $karyawan->nik . '.' . $photoFile->getClientOriginalExtension();
+                $photoName = $karyawan->nik . '_' . uniqid() . '.' . $photoFile->getClientOriginalExtension();
 
                 // Delete old photo if it exists and the new name is different or if the old one is simply being replaced
                 if ($karyawan->foto) {

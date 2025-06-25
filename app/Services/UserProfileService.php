@@ -37,13 +37,13 @@ final class UserProfileService
 
         if ($photoFile) {
             $directory = 'uploads/karyawan'; // Path relative to the 'public' disk's root (storage/app/public)
-            $photoName = $karyawan->nik . '.' . $photoFile->getClientOriginalExtension();
+            $photoName = $karyawan->nik . '_' . uniqid() . '.' . $photoFile->getClientOriginalExtension();
             
             // If there's an old photo, prepare its path for deletion
             if ($karyawan->foto) {
                 $oldPhotoPath = $directory . '/' . $karyawan->foto;
-                // Check if the old photo exists on the public disk and is different from the new one before deleting
-                if (Storage::disk('public')->exists($oldPhotoPath) && $karyawan->foto !== $photoName) {
+                // Check if the old photo exists on the public disk before deleting
+                if (Storage::disk('public')->exists($oldPhotoPath)) {
                     Storage::disk('public')->delete($oldPhotoPath);
                 }
             }

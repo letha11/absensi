@@ -5,7 +5,7 @@
         <div class="avatar">
             @if (!empty(Auth::guard('karyawan')->user()->foto))
                 @php
-                    $path = Storage::url('/uploads/karyawan/'.Auth::guard('karyawan')->user()->foto);
+                    $path = Storage::url('uploads/karyawan/'.Auth::guard('karyawan')->user()->foto);
                 @endphp
                 <img src="{{ url($path) }}" alt="avatar" class="imaged w64" style="height:60px; object-fit: cover;">
             @else
