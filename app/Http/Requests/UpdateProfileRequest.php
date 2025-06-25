@@ -31,4 +31,24 @@ class UpdateProfileRequest extends FormRequest
             'foto' => ['nullable', 'image', 'mimes:jpeg,png,jpg', 'max:2048'], // Max 2MB
         ];
     }
+
+    /**
+     * Get custom error messages for validation rules.
+     *
+     * @return array<string, string>
+     */
+    public function messages(): array
+    {
+        return [
+            'nama_lengkap.required' => 'Nama lengkap harus diisi.',
+            'nama_lengkap.max' => 'Nama lengkap tidak boleh lebih dari 255 karakter.',
+            'no_hp.required' => 'Nomor HP harus diisi.',
+            'no_hp.max' => 'Nomor HP tidak boleh lebih dari 15 karakter.',
+            'password.min' => 'Password minimal harus 8 karakter.',
+            'password.confirmed' => 'Konfirmasi password tidak cocok.',
+            'foto.image' => 'File harus berupa gambar.',
+            'foto.mimes' => 'Format foto harus jpeg, png, atau jpg.',
+            'foto.max' => 'Ukuran foto tidak boleh lebih dari 2MB.',
+        ];
+    }
 }

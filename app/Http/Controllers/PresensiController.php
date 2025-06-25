@@ -88,6 +88,16 @@ final class PresensiController extends Controller
 
     public function updateprofile(UpdateProfileRequest $request): RedirectResponse
     {
+        // Check for PHP upload size limits before validation
+        if ($this->hasUploadSizeError()) {
+            return Redirect::back()
+                ->withInput()
+                ->withErrors(['foto' => 'Ukuran foto terlalu besar. Maksimal 2MB']);
+        }
+
+        // Laravel's FormRequest validation should have already handled the 2MB limit
+        // If we reach this point, the file size should be acceptable
+
         /** @var \App\Models\Karyawan $karyawanAuth */
         $karyawanAuth = Auth::guard('karyawan')->user();
         $email = (string) $karyawanAuth->email;
@@ -102,6 +112,26 @@ final class PresensiController extends Controller
         }
 
         return Redirect::back()->with(['error' => 'Data Gagal di Update']);
+    }
+
+    /**
+     * Check if there's an upload size error due to PHP limits
+     */
+    private function hasUploadSizeError(): bool
+    {
+        // If we have form data but no $_FILES, likely hit size limit
+        if (empty($_FILES) && !empty($_POST)) {
+            return true;
+        }
+
+        // Check $_FILES for size-related errors
+        if (isset($_FILES['foto']) && 
+            ($_FILES['foto']['error'] === UPLOAD_ERR_FORM_SIZE || 
+             $_FILES['foto']['error'] === UPLOAD_ERR_INI_SIZE)) {
+            return true;
+        }
+
+        return false;
     }
 
     public function histori(): View
