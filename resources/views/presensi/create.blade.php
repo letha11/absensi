@@ -248,7 +248,7 @@
                                         text: respond.message,
                                         icon: 'success'
                                     })
-                                    setTimeout("location.href='/dashboard'", 3000);
+                                    setTimeout("location.href='{{ route('karyawan.dashboard') }}'", 3000);
                                 } else{
                                      // Assuming respond is JSON with status and message for error as well
                                     Swal.fire({
