@@ -175,9 +175,12 @@
             <div class="tab-pane fade" id="profile" role="tabpanel">
                 <ul class="listview image-listview">
                     @foreach ($leaderboard as $d)
-                    <li>
+                    <li>e
                         <div class="item">
-                            <img src="{{ $d->foto_in ? Storage::url('uploads/absensi/'.$d->foto_in) : asset('assets/img/sample/avatar/avatar1.jpg') }}" alt="image" class="image" style="width: 40px; height: 40px; object-fit: cover;">
+                            @php
+                                $path = Storage::url('uploads/absensi/'.$d->foto_in);
+                            @endphp
+                            <img src="{{ $d->foto_in ? url($path) : asset('assets/img/sample/avatar/avatar1.jpg') }}" alt="image" class="image" style="width: 40px; height: 40px; object-fit: cover;">
                             <div class="in">
                                 <div><b>{{ $d->karyawan->nama_lengkap }}</b><br>
                                     <small class="text-muted">{{ $d->karyawan->jabatan }}</small>
@@ -198,3 +201,32 @@
     </div>
 </div>
 @endsection
+
+@push('myscript')
+<style>
+    /* Neutralize Bootstrap row gutters within the appCapsule */
+    #appCapsule .row {
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+    }
+
+    #appCapsule .row > [class*="col-"] {
+        padding-left: 8px !important; /* Restore padding if needed, or adjust */
+        padding-right: 8px !important;
+    }
+
+    #menu-section {
+        /* position: relative !important; */
+        width: 100% !important;
+        /* margin-top: 60px !important; */
+    }
+
+    #presence-section {
+        position: relative !important;
+        width: 100% !important;
+        top: 0 !important;
+        /* margin-top: 20px !important; */
+    }
+
+</style>
+@endpush

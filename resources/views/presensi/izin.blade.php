@@ -98,3 +98,19 @@
     </a>
 </div> 
 @endsection
+
+@push('myscript')
+<style>
+    @media (min-width: 992px) {
+        .fab-button.bottom-right {
+            position: absolute !important; /* Change to absolute positioning */
+            left: 50% !important; /* Center horizontally */
+            transform: translateX(-50%) !important; /* Adjust for true centering */
+            bottom: 70px !important; /* Maintain original vertical position */
+            margin-left: 0 !important; /* Ensure no conflicting margins */
+            margin-right: 0 !important;
+            /* You may need to adjust the 'bottom' value if there's a bottom navigation bar */
+        }
+    }
+</style>
+@endpush
