@@ -113,7 +113,7 @@ final class PresensiService
         $existingPresensi = Presensi::where('karyawan_email', $email)
                                     ->where('tgl_presensi', $today)
                                     ->first();
-        
+
         $ket = $existingPresensi ? 'out' : 'in';
 
         // We need Karyawan->nik for the filename, fetch the Karyawan model first
@@ -145,7 +145,7 @@ final class PresensiService
             return [
                 'status' => 'error',
                 'message' => 'Invalid image data provided.',
-                'type' => $ket 
+                'type' => $ket
             ];
         }
 
@@ -160,7 +160,7 @@ final class PresensiService
             $existingPresensi->jam_out = $currentTime->toTimeString(); // Store as string H:i:s
             $existingPresensi->foto_out = $fileName; // Storing only filename
             $existingPresensi->lokasi_out = $lokasi;
-            
+
             if ($existingPresensi->save()) {
                 Storage::disk('public')->put($filePathOnPublicDisk, $decodedImage);
                 return [
@@ -182,7 +182,7 @@ final class PresensiService
             ]);
 
             if ($newPresensi) {
-                Storage::disk('public')->put($filePathOnPublicDisk, $decodedImage);
+                 Storage::disk('public')->put($filePathOnPublicDisk, $decodedImage);
                 return [
                     'status' => 'success',
                     'message' => 'Terima kasih. Selamat Bekerja',
@@ -197,4 +197,4 @@ final class PresensiService
             'type' => $ket
         ];
     }
-} 
+}

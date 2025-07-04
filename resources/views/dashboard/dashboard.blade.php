@@ -9,7 +9,7 @@
                 @endphp
                 <img src="{{ url($path) }}" alt="avatar" class="imaged w64" style="height:60px; object-fit: cover;">
             @else
-                <img src="assets/img/sample/avatar/avatar1.jpg" alt="avatar" class="imaged w64 rounded" style="height:60px; object-fit: cover;">
+                <img src="{{  asset('assets/img/sample/avatar/avatar1.jpg')  }}" alt="avatar" class="imaged w64 rounded" style="height:60px; object-fit: cover;">
             @endif
         </div>
         <div id="user-info" class="flex-grow-1">
@@ -161,7 +161,14 @@
                     @foreach ($historibulanini as $d)
                     <li>
                         <div class="item">
-                            <img src="{{ $d->foto_in ? Storage::url('uploads/absensi/'.$d->foto_in) : asset('assets/img/sample/avatar/avatar1.jpg') }}" alt="image" class="image" style="width: 40px; height: 40px; object-fit: cover;">
+                            @php
+                                $path = Storage::url('uploads/absensi/'.$d->foto_in);
+                            @endphp
+                            @if ($d->foto_in)
+                                <img src="{{  asset($path)  }}" alt="image" class="image" style="width: 40px; height: 40px; object-fit: cover;">
+                            @else
+                                <img src="{{ asset('assets/img/sample/avatar/avatar1.jpg') }}" alt="image" class="image" style="width: 40px; height: 40px; object-fit: cover;">
+                            @endif
                             <div class="in">
                                 <div>{{ date("d-m-Y",strtotime($d->tgl_presensi)) }}</div>
                                 <span class="badge badge-success">{{ $d->jam_in->format('H:i') }}</span>
@@ -175,12 +182,16 @@
             <div class="tab-pane fade" id="profile" role="tabpanel">
                 <ul class="listview image-listview">
                     @foreach ($leaderboard as $d)
-                    <li>e
+                    <li>
                         <div class="item">
                             @php
                                 $path = Storage::url('uploads/absensi/'.$d->foto_in);
                             @endphp
-                            <img src="{{ $d->foto_in ? url($path) : asset('assets/img/sample/avatar/avatar1.jpg') }}" alt="image" class="image" style="width: 40px; height: 40px; object-fit: cover;">
+                            @if ($d->foto_in)
+                                <img src="{{  asset($path)  }}" alt="image" class="image" style="width: 40px; height: 40px; object-fit: cover;">
+                            @else
+                                <img src="{{ asset('assets/img/sample/avatar/avatar1.jpg') }}" alt="image" class="image" style="width: 40px; height: 40px; object-fit: cover;">
+                            @endif
                             <div class="in">
                                 <div><b>{{ $d->karyawan->nama_lengkap }}</b><br>
                                     <small class="text-muted">{{ $d->karyawan->jabatan }}</small>
@@ -190,10 +201,10 @@
                                 </span>
                             </div>
                         </div>
-                    </li>  
+                    </li>
                     @endforeach
-                    
-                    
+
+
                 </ul>
             </div>
 

@@ -36,7 +36,7 @@ final class PresensiController extends Controller
         $today = Carbon::today()->toDateString();
         /** @var \App\Models\Karyawan $karyawan */
         $karyawan = Auth::guard('karyawan')->user();
-        
+
         $cekPresensi = $karyawan->presensi()
             ->where('tgl_presensi', $today)
             ->count();
@@ -50,7 +50,7 @@ final class PresensiController extends Controller
         $officeLatitude = (float) $konfigurasiLokasi->latitude;
         $officeLongitude = (float) $konfigurasiLokasi->longitude;
         $radiusMeters = (int) $konfigurasiLokasi->radius;
-        
+
         return view('presensi.create', [
             'cek' => $cekPresensi,
             'officeLatitude' => $officeLatitude,
@@ -101,7 +101,7 @@ final class PresensiController extends Controller
         /** @var \App\Models\Karyawan $karyawanAuth */
         $karyawanAuth = Auth::guard('karyawan')->user();
         $email = (string) $karyawanAuth->email;
-        
+
         $profileData = $request->safe()->except(['foto', 'password_confirmation']);
         $photoFile = $request->hasFile('foto') ? $request->file('foto') : null;
 
@@ -125,8 +125,8 @@ final class PresensiController extends Controller
         }
 
         // Check $_FILES for size-related errors
-        if (isset($_FILES['foto']) && 
-            ($_FILES['foto']['error'] === UPLOAD_ERR_FORM_SIZE || 
+        if (isset($_FILES['foto']) &&
+            ($_FILES['foto']['error'] === UPLOAD_ERR_FORM_SIZE ||
              $_FILES['foto']['error'] === UPLOAD_ERR_INI_SIZE)) {
             return true;
         }
@@ -137,7 +137,7 @@ final class PresensiController extends Controller
     public function histori(): View
     {
         $namabulan = [
-            "", "Januari", "Februari", "Maret", "April", "Mei", "Juni", 
+            "", "Januari", "Februari", "Maret", "April", "Mei", "Juni",
             "Juli", "Agustus", "September", "Oktober", "November", "Desember"
         ];
         return view('presensi.histori', compact('namabulan'));
@@ -153,7 +153,7 @@ final class PresensiController extends Controller
         if (!$bulan || !$tahun) {
             return view('presensi.gethistori', ['histori' => collect()]);
         }
-        
+
         $histori = $karyawan->presensi()
             ->whereMonth('tgl_presensi', $bulan)
             ->whereYear('tgl_presensi', $tahun)
@@ -162,7 +162,7 @@ final class PresensiController extends Controller
 
         return view('presensi.gethistori', compact('histori'));
     }
-    
+
     public function izin(): View
     {
         /** @var \App\Models\Karyawan $karyawan */
